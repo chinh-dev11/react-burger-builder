@@ -118,8 +118,7 @@ class BurgerBuilder extends Component {
                         purchaseContinued={this.purchaseContinueHandler}
                         price={this.state.totalPrice}
                         />
-                </Modal>
-                
+                </Modal>                
             </Aux>
         );
     };
