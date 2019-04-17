@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/Aux'; // custom component should be imported as Aux (capitalized)
+import Aux from '../Aux/Aux'; // custom component should be imported as Aux (capitalized)
 import classes from './Layout.module.css';
-import Toolbar from '../Navigation/Toolbar/Toolbar';
-import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
 class Layout extends Component {
     state = {
@@ -17,7 +17,7 @@ class Layout extends Component {
 
     sideDrawerToggleHandler = () => {
         /* this.setState({
-            showSideDrawer: !this.state.showSideDrawer //! getting the state (this.state.showSideDrawer) in setState might not return the previous state due to the async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
+            showSideDrawer: !this.state.showSideDrawer //! getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
         }); */
         this.setState((prevState) => {
             return {
