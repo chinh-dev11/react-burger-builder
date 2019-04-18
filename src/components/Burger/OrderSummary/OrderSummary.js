@@ -12,7 +12,7 @@ class OrderSummanry extends Component {
      * The Ordersummary is left as class-based component with componentWillUpdate Hook for debugging purposes
      */
     /* componentWillUpdate() {
-        console.log('[OrderSummary] WillUpdate'); //! performance improvement: the OrderSummary component gets updated when adding/removing ingredients (with more/less btns) even when the Modal (OrderSummary is inside the Modal) is not showing therefore it is NOT OPTIMIZED
+        console.log('[OrderSummary] WillUpdate'); // REM: performance improvement: the OrderSummary component gets updated when adding/removing ingredients (with more/less btns) even when the Modal (OrderSummary is inside the Modal) is not showing therefore it is NOT OPTIMIZED
     } */
     render(props) {
         const ingredientsSummary = Object.keys(this.props.ingredients)
@@ -21,6 +21,7 @@ class OrderSummanry extends Component {
                     <li key={igKey}><span style={{textTransform: 'capitalize'}}>{igKey}:</span> {this.props.ingredients[igKey]}</li>
                 );
             });
+            
         return (
             <Aux>
                 <h3>Your Order</h3>

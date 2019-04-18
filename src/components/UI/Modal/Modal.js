@@ -8,11 +8,15 @@ import Backdrop from '../../UI/Backdrop/Backdrop';
 //
 
 class Modal extends Component {
-    //* performance improvement purposes
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) { //* performance improvement purposes
         // console.log('[Modal] shouldComponentUpdate: ', nextProps.show);
         // return nextProps.show; // re-rendering only when show is true will not dismiss (hide) the modal since render() needs to run to get the style transform updated (show/hide). Thus the validation needs to be on props.show changes and not when it's true only
-        return nextProps.show !== this.props.show;
+        if (nextProps.show !== this.props.show || nextProps.children !== this.props.children) { // also validating if spinner or summary should be displayed
+            return true;
+        }
+
+        return false;
+        // return true
     }
 
     render(props) {
