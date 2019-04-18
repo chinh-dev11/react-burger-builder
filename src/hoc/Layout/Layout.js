@@ -17,7 +17,7 @@ class Layout extends Component {
 
     sideDrawerToggleHandler = () => {
         /* this.setState({
-            showSideDrawer: !this.state.showSideDrawer //! getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
+            showSideDrawer: !this.state.showSideDrawer // REM: getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
         }); */
         this.setState((prevState) => {
             return {
