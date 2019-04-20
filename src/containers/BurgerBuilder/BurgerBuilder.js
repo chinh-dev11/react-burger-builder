@@ -23,16 +23,30 @@ class BurgerBuilder extends Component {
     } */
     // new way
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
-        loading: false
+        loading: false,
+        error: false
+    };
+
+    componentDidMount = () => {
+        console.log('[BurgerBuilder] componentDidMount');
+
+        axios.get('/ingredients.json')
+            .then(response => {
+                // console.log('[BurgerBuilder] componentDidMount get response: ', response);
+                this.setState({
+                    ingredients: response.data
+                });
+            })
+            .catch(error => { // REM: without catching error, the app will break if error occurred bc data of response (setState above) would be undefined (browser error: Unhandled Rejection (TypeError): Cannot read property 'data' of undefined)
+                // console.log('[BurgerBuilder] componentDidMount get error: ', error);
+                this.setState({
+                    error: true
+                });
+            });
     };
 
     updatePurchaseHandler = (ingredients) => {
@@ -117,14 +131,14 @@ class BurgerBuilder extends Component {
         // extension .json is required for Firebase
         axios.post('/orders.json', order)
             .then((response) => {
-                console.log(response);
+                // console.log('[BurgerBuilder] post response: ', response);
                 this.setState({
                     loading: false,
                     purchasing: false
                 });
             })
             .catch((error) => {
-                console.log(error);
+                // console.log('[BurgerBuilder] post error: ', error);
                 this.setState({
                     loading: false,
                     purchasing: false
@@ -133,39 +147,54 @@ class BurgerBuilder extends Component {
     };
 
     render() {
-        // to disabling the Less button if the ingredient is 0
-        const disabledInfo = { ...this.state.ingredients }; // REM: create a copy of ingredients
-        for (let key in disabledInfo) {
-            disabledInfo[key] = disabledInfo[key] <= 0;
-        }
+        let orderSummary = null;
+        let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
-        let orderSummary = (
-            <OrderSummary
+        if (this.state.loading) {
+            orderSummary = <Spinner />;
+        };
+
+        if (this.state.ingredients) {
+            // to disabling the Less button if the ingredient is 0
+            const disabledInfo = { ...this.state.ingredients }; // REM: create a copy of ingredients
+            for (let key in disabledInfo) {
+                disabledInfo[key] = disabledInfo[key] <= 0;
+            }
+
+            orderSummary = (
+                <OrderSummary
                     ingredients={this.state.ingredients}
                     purchaseCancelled={this.purchaseCancelHandler}
                     purchaseContinued={this.purchaseContinueHandler}
                     price={this.state.totalPrice}
                 />
-        );
+            );
 
-        if (this.state.loading) { 
-            orderSummary = <Spinner />;
-        };
+            if (this.state.loading) {
+                orderSummary = <Spinner />;
+            };
+
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                        ingredientAdded={this.addIngredientHandler}
+                        ingredientRemoved={this.removeIngredientHandler}
+                        disabledInfo={disabledInfo}
+                        price={this.state.totalPrice}
+                        purchasable={this.state.purchasable}
+                        ordered={this.purchaseHandler}
+                    />
+                </Aux>
+            );
+        }
 
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
                     {orderSummary}
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
-                    disabledInfo={disabledInfo}
-                    price={this.state.totalPrice}
-                    purchasable={this.state.purchasable}
-                    ordered={this.purchaseHandler}
-                />
+                {burger}
             </Aux>
         );
     };
