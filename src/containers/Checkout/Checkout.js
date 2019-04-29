@@ -11,52 +11,12 @@ class Checkout extends Component {
         }
     };
 
-    componentDidMount() {
-        console.log('[Checkout] componentDidMount');
-        console.log(this.props);
-    }
-
     checkoutCancelledHandler = () => {
-        this.props.history.goBack();
+        this.props.history.goBack(); // back to previous page
     };
 
     checkoutContinuedHandler = () => {
-        this.props.history.replace(this.props.match.url + '/contact-data');
-        /* this.setState({
-            loading: true
-        });
-
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
-            customer: {
-                name: 'Max',
-                address: {
-                    street: 'Teststreet 1',
-                    zipcode: '123456',
-                    country: 'Germany'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest' // [cheapest, ...]
-        };
-
-        // extension .json is required for Firebase
-        axios.post('/orders.json', order)
-            .then((response) => {
-                // console.log('[BurgerBuilder] post response: ', response);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            })
-            .catch((error) => {
-                // console.log('[BurgerBuilder] post error: ', error);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            }); */
+        this.props.history.replace(this.props.match.url + '/contact-data'); // relative path to next page
     };
 
     render() {
@@ -64,8 +24,9 @@ class Checkout extends Component {
             <div>
                 <CheckoutSummary
                     ingredients={this.state.ingredients}
-                    checkoutCancelled={this.checkoutCancelledHandler}
-                    checkoutContinued={this.checkoutContinuedHandler} />
+                    checkoutCancelled={this.checkoutCancelledHandler} // back
+                    checkoutContinued={this.checkoutContinuedHandler} // next page
+                    />
             </div>
         );
     }
