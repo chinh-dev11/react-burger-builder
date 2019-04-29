@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import Aux from '../../hoc/Aux/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -32,8 +33,8 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount = () => {
-        console.log('[BurgerBuilder] componentDidMount');
-
+        // console.log('[BurgerBuilder] componentDidMount');
+        // console.log(this.props);
         axios.get('/ingredients.json')
             .then(response => {
                 // console.log('[BurgerBuilder] componentDidMount get response: ', response);
@@ -108,45 +109,11 @@ class BurgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        // console.log('Continue...');
-        this.setState({
-            loading: true
-        });
-
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
-            customer: {
-                name: 'Max',
-                address: {
-                    street: 'Teststreet 1',
-                    zipcode: '123456',
-                    country: 'Germany'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest' // [cheapest, ...]
-        };
-
-        // extension .json is required for Firebase
-        axios.post('/orders.json', order)
-            .then((response) => {
-                // console.log('[BurgerBuilder] post response: ', response);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            })
-            .catch((error) => {
-                // console.log('[BurgerBuilder] post error: ', error);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            });
+        this.props.history.push('/checkout');
     };
 
-    render() {
+    render(props) {
+        // console.log(this.props);
         let orderSummary = null;
         let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
