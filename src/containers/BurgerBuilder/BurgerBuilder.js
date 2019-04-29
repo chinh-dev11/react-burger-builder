@@ -110,9 +110,22 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         // console.log(this.props);
+        let params = [];
+        let queryString = '';
+        const ingredients = this.state.ingredients;
+
+        for (let i in ingredients) {
+            if (ingredients[i] > 0) {
+                params.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i])); // encodeURIComponent: replace instance of certain characters by escape sequences (up to 4) representing the UFT-8 encoding of the character. eg: encodeURIComponent('?y=test') -> "%3Fy%3Dtest"
+            }
+        }
+        
+        queryString = params.join('&');
+
         // this.props.history.push('/checkout'); // OR
         this.props.history.push({
-            pathname: '/checkout'
+            pathname: '/checkout',
+            search: queryString
         });
     };
 
