@@ -16,7 +16,7 @@ class Orders extends Component {
                 const fetchedOrders = [];
                 for (let key in res.data) {
                     fetchedOrders.push({
-                        ...res.data[key],
+                        ...res.data[key], // flatten object to key-value pair
                         id: key
                     });
                 }
@@ -41,7 +41,7 @@ class Orders extends Component {
                             ingredients={order.ingredients}
                             price={order.price}
                         />
-                    )
+                    );
                 })}
             </div>
         );

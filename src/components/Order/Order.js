@@ -5,7 +5,6 @@ import classes from './Order.module.css';
 const order = (props) => {
     // console.log(typeof props.price); // price already converted to number in Checkout before posting it to server
     // console.log(props.ingredients);
-
     let ingredients = [];
     for (let ingredientName in props.ingredients) {
         ingredients.push({
@@ -36,8 +35,8 @@ const order = (props) => {
             <p>Ingredients: {ingredientsOuput}</p>
             <p>Price: <strong>${props.price.toFixed(2)}</strong></p>
             {/* REM: Use Number.parseFloat {Number.parseFloat(props.price).toFixed(2)} to convert price string to a number as below */}
-            {/* REM: Or add plus sign (+) to the price in Orders.js before passing it */}
             {/* <p>Price: <strong>${Number.parseFloat(props.price).toFixed(2)}</strong></p> */}
+            {/* REM: Or add plus sign (+) to the price in Orders.js before passing it */}
         </div>
     );
 }
