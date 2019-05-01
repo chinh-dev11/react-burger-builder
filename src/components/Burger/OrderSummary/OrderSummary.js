@@ -15,6 +15,7 @@ class OrderSummanry extends Component {
         console.log('[OrderSummary] WillUpdate'); // REM: performance improvement: the OrderSummary component gets updated when adding/removing ingredients (with more/less btns) even when the Modal (OrderSummary is inside the Modal) is not showing therefore it is NOT OPTIMIZED
     } */
     render(props) {
+        // console.log('[OrderSummary] ', this.props);
         const ingredientsSummary = Object.keys(this.props.ingredients)
             .map((igKey) => {
                 return (

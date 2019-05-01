@@ -109,17 +109,19 @@ class BurgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        // console.log(this.props);
+        // console.log('[BurgerBuilder] purchaseContinueHandler');
         let params = [];
         let queryString = '';
         const ingredients = this.state.ingredients;
-
+        // console.log(ingredients);
         for (let i in ingredients) {
             if (ingredients[i] > 0) {
                 params.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i])); // encodeURIComponent: replace instance of certain characters by escape sequences (up to 4) representing the UFT-8 encoding of the character. eg: encodeURIComponent('?y=test') -> "%3Fy%3Dtest"
             }
         }
-        
+
+        params.push('price=' + this.state.totalPrice);
+
         queryString = params.join('&');
 
         // this.props.history.push('/checkout'); // OR
@@ -130,7 +132,7 @@ class BurgerBuilder extends Component {
     };
 
     render(props) {
-        // console.log(this.props);
+        // console.log('[BurgerBuilder] render');
         let orderSummary = null;
         let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
@@ -138,6 +140,7 @@ class BurgerBuilder extends Component {
             orderSummary = <Spinner />;
         };
 
+        // console.log('this.state.ingredients: ', this.state.ingredients);
         if (this.state.ingredients) {
             // to disabling the Less button if the ingredient is 0
             const disabledInfo = { ...this.state.ingredients }; // REM: create a copy of ingredients
