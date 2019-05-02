@@ -66,7 +66,7 @@ class Checkout extends Component {
                     path={this.props.match.path + '/contact-data'}
                     /**
                     REM: render manually prevents having routing props (history, location, match) avail to ContactData component
-                    FIX:
+                    // FIX:
                     1) passing the props as argument to render()
                         render={(props) => (
                             <ContactData

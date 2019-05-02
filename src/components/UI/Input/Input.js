@@ -18,7 +18,9 @@ const input = props => {
             inputElement = (
                 <select
                     className={classes.Select}
-                    value={props.config.value}>
+                    // value={props.config.value} 
+                    // defaultValue={props.config.value} 
+                    onChange={props.changed}>
                     {options}
                 </select>
             );
@@ -28,7 +30,8 @@ const input = props => {
                 <textArea
                     className={classes.InputElement}
                     {...props.config.elementConfig}
-                    value={props.config.value}
+                    value={props.config.value} 
+                    onChange={props.changed}
                 />
             break;
         default: // 'input'
@@ -36,7 +39,9 @@ const input = props => {
                 <input
                     className={classes.InputElement}
                     {...props.config.elementConfig}
-                    defaultValue={props.config.value}
+                    value={props.config.value} // REM: with value attribute, it requires handling manually, via onChange() event, to set (setState|useSate)) the input value thus have it display on input box in browser
+                    // defaultValue={props.config.value} // REM: with defaultValue attribute, it allows having value/text entered displaying on input box in browser, no need handling manually the input value
+                    onChange={props.changed}
                 />
             );
     }

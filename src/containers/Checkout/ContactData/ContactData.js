@@ -93,9 +93,24 @@ class ContactData extends Component {
             });
     };
 
+    // inputIdentifier: name, street, zipcode, country, email, deliveryMethod
+    inputChangedHandler = (evt, inputIdentifier) => {
+        // console.log(inputIdentifier);
+        // console.log(evt.target.value);
+        const updatedOrderForm = {...this.state.orderForm}; // clone (a copy) of orderForm by spreading the object
+        // console.log(updatedOrderForm);
+        // REM: spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
+        const updatedOrderElement = {...updatedOrderForm[inputIdentifier]}; // clone (a copy) an element of orderForm by spreading the object
+        // console.log(updatedOrderElement);
+        updatedOrderElement.value = evt.target.value;
+        updatedOrderForm[inputIdentifier] = updatedOrderElement;
+        this.setState({
+            orderForm: updatedOrderForm
+        });
+    };
+
     render(props) {
         // console.log('[ContactData] ', this.props);
-
         // console.log(this.state.orderForm);
         let formElementsArray = [];
         for (let key in this.state.orderForm) {
@@ -106,7 +121,8 @@ class ContactData extends Component {
         }
         // console.log(formElementsArray);
         const inputElements = formElementsArray.map(el => (
-            <Input key={el.id} config={el.config} />
+            <Input key={el.id} config={el.config} changed={(event) => this.inputChangedHandler(event, el.id)} /> // with value attribute
+            // <Input key={el.id} config={el.config} changed={this.inputChangedHandler} /> // with defaultValue attribute
         ));
 
         let form = <Spinner />;
