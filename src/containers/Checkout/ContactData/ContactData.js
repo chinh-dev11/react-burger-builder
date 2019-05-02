@@ -1,18 +1,65 @@
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import axios from '../../../axios-orders';
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component {
     state = {
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postalCode: ''
+        orderForm: {
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your name'
+                },
+                value: ''
+            },
+            street: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Street'
+                },
+                value: ''
+            },
+            zipcode: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Zip code'
+                },
+                value: ''
+            },
+            country: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Country'
+                },
+                value: ''
+            },
+            email: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'email',
+                    placeholder: 'Your email'
+                },
+                value: ''
+            },
+            deliveryMethod: {
+                elementType: 'select',
+                elementConfig: {
+                    options: [
+                        {value: 'fastest', displayName: 'Fastest'},
+                        {value: 'cheapest', displayName: 'Cheapest'},
+                    ]
+                },
+                value: ''
+            }
         },
         loading: false
     };
@@ -27,16 +74,6 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.totalPrice, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
-            customer: {
-                name: 'Max',
-                address: {
-                    street: 'Teststreet 1',
-                    zipcode: '123456',
-                    country: 'Germany'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest' // [cheapest, ...]
         };
 
         // extension .json is required for Firebase
@@ -62,10 +99,10 @@ class ContactData extends Component {
         if (!this.state.loading) {
             form = (
                 <form>
-                    <input className={classes.Input} type="text" name="name" placeholder="Your name" />
-                    <input className={classes.Input} type="email" name="email" placeholder="Your email" />
-                    <input className={classes.Input} type="text" name="street" placeholder="Street" />
-                    <input className={classes.Input} type="text" name="postal" placeholder="Postal Code" />
+                    <Input elementType={...} elementConfig={...} value={...} />
+                    <Input inputtype="input" type="email" name="email" placeholder="Your email" />
+                    <Input inputtype="input" type="text" name="street" placeholder="Street" />
+                    <Input inputtype="input" type="text" name="postal" placeholder="Postal Code" />
                     <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
                 </form>
             );
