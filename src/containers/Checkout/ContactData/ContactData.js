@@ -54,8 +54,8 @@ class ContactData extends Component {
                 elementType: 'select',
                 elementConfig: {
                     options: [
-                        {value: 'fastest', displayName: 'Fastest'},
-                        {value: 'cheapest', displayName: 'Cheapest'},
+                        { value: 'fastest', displayName: 'Fastest' },
+                        { value: 'cheapest', displayName: 'Cheapest' },
                     ]
                 },
                 value: ''
@@ -95,14 +95,25 @@ class ContactData extends Component {
 
     render(props) {
         // console.log('[ContactData] ', this.props);
+
+        // console.log(this.state.orderForm);
+        let formElementsArray = [];
+        for (let key in this.state.orderForm) {
+            formElementsArray.push({
+                id: key,
+                config: this.state.orderForm[key]
+            });
+        }
+        // console.log(formElementsArray);
+        const inputElements = formElementsArray.map(el => (
+            <Input key={el.id} config={el.config} />
+        ));
+
         let form = <Spinner />;
         if (!this.state.loading) {
             form = (
                 <form>
-                    <Input elementType={...} elementConfig={...} value={...} />
-                    <Input inputtype="input" type="email" name="email" placeholder="Your email" />
-                    <Input inputtype="input" type="text" name="street" placeholder="Street" />
-                    <Input inputtype="input" type="text" name="postal" placeholder="Postal Code" />
+                    {inputElements}
                     <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
                 </form>
             );

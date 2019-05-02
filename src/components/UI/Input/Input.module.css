@@ -10,6 +10,10 @@
     margin-bottom: 8px;
 }
 
+.Select {
+    width: 100%;
+}
+
 .InputElement {
     outline: none;
     border: 1px solid #ccc;

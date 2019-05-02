@@ -3,17 +3,42 @@ import React from 'react';
 import classes from './Input.module.css';
 
 const input = props => {
+    // console.log('[Input] ', props.config);
     let inputElement = null;
 
-    switch (props.elementType) {
-        case 'input':
-            inputElement = <input className={classes.InputElement} {...props.elememtConfig} value={props.value} />
+    switch (props.config.elementType) {
+        case 'select':
+            const options = props.config.elementConfig.options.map(option => (
+                <option
+                    key={option.value}
+                    value={option.value}>
+                    {option.displayName}
+                </option>
+            ));
+            inputElement = (
+                <select
+                    className={classes.Select}
+                    value={props.config.value}>
+                    {options}
+                </select>
+            );
             break;
         case 'text':
-            inputElement = <textArea className={classes.InputElement} {...props.elememtConfig} value={props.value} />
+            inputElement =
+                <textArea
+                    className={classes.InputElement}
+                    {...props.config.elementConfig}
+                    value={props.config.value}
+                />
             break;
-        default:
-            inputElement = <input className={classes.InputElement} {...props.elememtConfig} value={props.value} />
+        default: // 'input'
+            inputElement = (
+                <input
+                    className={classes.InputElement}
+                    {...props.config.elementConfig}
+                    defaultValue={props.config.value}
+                />
+            );
     }
 
     return (
