@@ -30,8 +30,8 @@ class OrderSummanry extends Component {
                 <ul>{ingredientsSummary}</ul>
                 <p>Total: <strong>{this.props.price.toFixed(2)}</strong></p>
                 <p>Continue to checkout?</p>
-                <Button clicked={this.props.purchaseCancelled} btnType="Danger">CANCEL</Button>
-                <Button clicked={this.props.purchaseContinued} btnType="Success">CONTINUE</Button>
+                <Button clicked={this.props.purchaseCancelled} cssClass="Danger">CANCEL</Button>
+                <Button clicked={this.props.purchaseContinued} cssClass="Success">CONTINUE</Button>
             </Aux>
         );
     };
@@ -57,8 +57,8 @@ const orderSummanry = (props) => {
             <ul>{ingredientsSummary}</ul>
             <p>Total: <strong>{props.price.toFixed(2)}</strong></p>
             <p>Continue to checkout?</p>
-            <Button clicked={props.purchaseCancelled} btnType="Danger">CANCEL</Button>
-            <Button clicked={props.purchaseContinued} btnType="Success">CONTINUE</Button>
+            <Button clicked={props.purchaseCancelled} cssClass="Danger">CANCEL</Button>
+            <Button clicked={props.purchaseContinued} cssClass="Success">CONTINUE</Button>
         </Aux>
     );
 };

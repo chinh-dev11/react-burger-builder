@@ -65,15 +65,23 @@ class ContactData extends Component {
     };
 
     orderHandler = (event) => {
-        event.preventDefault(); // prevent sending request auto due to form
+        // console.log(event);
+        // to prevent auto request sent, hence page reload, due to form
+        // event.preventDefault(); //! not sure it's applicable here???
 
         this.setState({
             loading: true
         });
 
+        const formData = {};
+        for (let formElementIdentifier in this.state.orderForm) {
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
+
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.totalPrice, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
+            orderData: formData
         };
 
         // extension .json is required for Firebase
@@ -128,9 +136,10 @@ class ContactData extends Component {
         let form = <Spinner />;
         if (!this.state.loading) {
             form = (
-                <form>
+                <form onSubmit={this.orderHandler}>
                     {inputElements}
-                    <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
+                    <Button cssClass="Success" btnType="submit">Order</Button>
+                    {/* <Button cssClass="Success" clicked={this.orderHandler}>Order</Button> */}
                 </form>
             );
         }
