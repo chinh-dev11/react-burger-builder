@@ -93,6 +93,14 @@ class ContactData extends Component {
             isValid = value.trim() !== '';
         }
 
+        if (rules.minLength) {
+            isValid = value.length >= 5 && isValid;
+        }
+
+        if (rules.maxLength) {
+            isValid = value.length <= 5 && isValid;
+        }
+
         return isValid;
     }
 
@@ -137,10 +145,10 @@ class ContactData extends Component {
     inputChangedHandler = (evt, inputIdentifier) => {
         // console.log(inputIdentifier);
         // console.log(evt.target.value);
-        const updatedOrderForm = {...this.state.orderForm}; // clone (a copy) of orderForm by spreading the object
+        const updatedOrderForm = { ...this.state.orderForm }; // clone (a copy) of orderForm by spreading the object
         // console.log(updatedOrderForm);
         // REM: spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
-        const updatedOrderElement = {...updatedOrderForm[inputIdentifier]}; // clone (a copy) an element of orderForm by spreading the object
+        const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
         // console.log(updatedOrderElement);
         updatedOrderElement.value = evt.target.value;
         updatedOrderElement.valid = this.checkValidity(evt.target.value, this.state.orderForm[inputIdentifier].validation);
