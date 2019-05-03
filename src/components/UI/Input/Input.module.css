@@ -10,10 +10,6 @@
     margin-bottom: 8px;
 }
 
-.Select {
-    width: 100%;
-}
-
 .InputElement {
     outline: none;
     border: 1px solid #ccc;
@@ -28,4 +24,16 @@
 .InputElement:focus {
     outline: none;
     background-color: #ccc;
+}
+
+.Invalid {
+    border: 1px solid red;
+    background-color: #fda49a;
+}
+
+.Error {
+    color: #fc4848;
+    margin-top: 5px;
+    display: block;
+    text-align: left;
 }

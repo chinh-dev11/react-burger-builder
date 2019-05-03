@@ -3,12 +3,19 @@ import React from 'react';
 import classes from './Input.module.css';
 
 const input = props => {
-    // console.log('[Input] ', props.config);
+    // console.log('[Input] ', props);
     let inputElement = null;
+    let inputClasses = [classes.Input];
+    let validationError = null;
 
-    switch (props.config.elementType) {
+    if (props.invalid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid);
+        validationError = <span className={classes.Error}>{props.validationError}</span>;
+    }
+
+    switch (props.elementType) {
         case 'select':
-            const options = props.config.elementConfig.options.map(option => (
+            const options = props.elementConfig.options.map(option => (
                 <option
                     key={option.value}
                     value={option.value}>
@@ -17,7 +24,7 @@ const input = props => {
             ));
             inputElement = (
                 <select
-                    className={classes.Select}
+                    className={inputClasses.join(' ')}
                     // value={props.config.value} 
                     // defaultValue={props.config.value} 
                     onChange={props.changed}>
@@ -28,19 +35,19 @@ const input = props => {
         case 'text':
             inputElement =
                 <textArea
-                    className={classes.InputElement}
-                    {...props.config.elementConfig}
-                    value={props.config.value} 
+                    className={inputClasses.join(' ')}
+                    {...props.elementConfig}
+                    value={props.value} 
                     onChange={props.changed}
                 />
             break;
         default: // 'input'
             inputElement = (
                 <input
-                    className={classes.InputElement}
-                    {...props.config.elementConfig}
-                    value={props.config.value} // REM: with value attribute, it requires handling manually, via onChange() event, to set (setState|useSate)) the input value thus have it display on input box in browser
-                    // defaultValue={props.config.value} // REM: with defaultValue attribute, it allows having value/text entered displaying on input box in browser, no need handling manually the input value
+                    className={inputClasses.join(' ')}
+                    {...props.elementConfig}
+                    value={props.value} // REM: with value attribute, it requires handling manually, via onChange() event, to set (setState|useSate)) the input value thus have it display on input box in browser
+                    // defaultValue={props.config.value} // REM: with defaultValue attribute, it allows having value/text entered displaying on input box in browser, no need handling manually the input value displaying
                     onChange={props.changed}
                 />
             );
@@ -50,6 +57,7 @@ const input = props => {
         <div className={classes.Input}>
             <label className={classes.Label}>{props.label}</label>
             {inputElement}
+            {validationError}
         </div>
     );
 };

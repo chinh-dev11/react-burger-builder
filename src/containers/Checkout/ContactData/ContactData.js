@@ -20,7 +20,12 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                errorType: {
+                    empty: 'Can\'t be empty'
+                },
+                validationError: '',
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -32,7 +37,12 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                errorType: {
+                    empty: 'Can\'t be empty'
+                },
+                validationError: '',
+                touched: false
             },
             zipcode: {
                 elementType: 'input',
@@ -46,7 +56,14 @@ class ContactData extends Component {
                     minLength: 5,
                     maxLength: 5
                 },
-                valid: false
+                valid: false,
+                errorType: {
+                    empty: 'Can\'t be empty',
+                    minLength: 'Minimum length of 5',
+                    maxLength: 'Maximum length of 5',
+                },
+                validationError: '',
+                touched: false
             },
             country: {
                 elementType: 'input',
@@ -58,7 +75,12 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                errorType: {
+                    empty: 'Can\'t be empty'
+                },
+                validationError: '',
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -70,7 +92,12 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                errorType: {
+                    empty: 'Can\'t be empty'
+                },
+                validationError: '',
+                touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -86,21 +113,33 @@ class ContactData extends Component {
         loading: false
     };
 
-    checkValidity(value, rules) {
+    checkValidityAndError(value, orderElement, updatedOrderElement) {
         let isValid = false;
 
-        if (rules.required) {
-            isValid = value.trim() !== '';
+        if (orderElement.validation.required) {
+            if (value.trim() !== '') {
+                isValid = true;
+            } else {
+                updatedOrderElement.validationError = orderElement.errorType.empty;
+            }
         }
 
-        if (rules.minLength) {
-            isValid = value.length >= 5 && isValid;
+        if (orderElement.validation.minLength) {
+            if (value.length < orderElement.validation.minLength) {
+                updatedOrderElement.validationError = orderElement.errorType.minLength;
+            }
+
+            isValid = value.length >= orderElement.validation.minLength && isValid;
         }
 
-        if (rules.maxLength) {
-            isValid = value.length <= 5 && isValid;
-        }
+        if (orderElement.validation.maxLength) {
+            if (value.length > orderElement.validation.maxLength) {
+                updatedOrderElement.validationError = orderElement.errorType.maxLength;
+            }
 
+            isValid = value.length <= orderElement.validation.maxLength && isValid;
+        }
+        // console.log(orderElement);
         return isValid;
     }
 
@@ -151,8 +190,10 @@ class ContactData extends Component {
         const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
         // console.log(updatedOrderElement);
         updatedOrderElement.value = evt.target.value;
-        updatedOrderElement.valid = this.checkValidity(evt.target.value, this.state.orderForm[inputIdentifier].validation);
-        console.log(updatedOrderElement);
+        updatedOrderElement.valid = this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], updatedOrderElement);
+        // updatedOrderElement.valid = this.checkValidity(evt.target.value, this.state.orderForm[inputIdentifier].validation, this.state.orderForm[inputIdentifier], updatedOrderElement);
+        updatedOrderElement.touched = true;
+        // console.log(updatedOrderElement);
         updatedOrderForm[inputIdentifier] = updatedOrderElement;
         this.setState({
             orderForm: updatedOrderForm
@@ -170,9 +211,17 @@ class ContactData extends Component {
             });
         }
         // console.log(formElementsArray);
-        const inputElements = formElementsArray.map(el => (
-            <Input key={el.id} config={el.config} changed={(event) => this.inputChangedHandler(event, el.id)} /> // with value attribute
-            // <Input key={el.id} config={el.config} changed={this.inputChangedHandler} /> // with defaultValue attribute
+        const inputElements = formElementsArray.map(formElement => (
+            <Input
+                key={formElement.id}
+                elementType={formElement.config.elementType}
+                elementConfig={formElement.config.elementConfig}
+                value={formElement.config.value}
+                invalid={!formElement.config.valid}
+                shouldValidate={formElement.config.validation}
+                touched={formElement.config.touched}
+                validationError={formElement.config.validationError}
+                changed={(event) => this.inputChangedHandler(event, formElement.id)} />
         ));
 
         let form = <Spinner />;
