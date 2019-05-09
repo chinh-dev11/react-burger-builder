@@ -107,38 +107,47 @@ class ContactData extends Component {
                         { value: 'cheapest', displayName: 'Cheapest' },
                     ]
                 },
-                value: ''
+                value: '',
+                validation: {}, // FIX: 1) explicitly declare empty object to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option. This is a preferred method since it keeps the form config uniformly
+                valid: true
             }
         },
+        formIsValid: false,
         loading: false
     };
 
     checkValidityAndError(value, orderElement, updatedOrderElement) {
-        let isValid = false;
+        let isValid = true;
+
+        if (!orderElement.validation) {
+            return true; // FIX: 2) to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option
+        }
 
         if (orderElement.validation.required) {
             if (value.trim() !== '') {
                 isValid = true;
             } else {
+                isValid = false;
                 updatedOrderElement.validationError = orderElement.errorType.empty;
             }
         }
 
         if (orderElement.validation.minLength) {
+            isValid = value.length >= orderElement.validation.minLength && isValid;
+
             if (value.length < orderElement.validation.minLength) {
                 updatedOrderElement.validationError = orderElement.errorType.minLength;
             }
-
-            isValid = value.length >= orderElement.validation.minLength && isValid;
         }
 
         if (orderElement.validation.maxLength) {
+            isValid = value.length <= orderElement.validation.maxLength && isValid;
+
             if (value.length > orderElement.validation.maxLength) {
                 updatedOrderElement.validationError = orderElement.errorType.maxLength;
             }
-
-            isValid = value.length <= orderElement.validation.maxLength && isValid;
         }
+
         // console.log(orderElement);
         return isValid;
     }
@@ -195,8 +204,17 @@ class ContactData extends Component {
         updatedOrderElement.touched = true;
         // console.log(updatedOrderElement);
         updatedOrderForm[inputIdentifier] = updatedOrderElement;
+        // console.log(updatedOrderForm);
+
+        let formIsValid = true;
+
+        for (let inputIdentifier in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        }
+        // console.log(formIsValid);
         this.setState({
-            orderForm: updatedOrderForm
+            orderForm: updatedOrderForm,
+            formIsValid: formIsValid
         });
     };
 
@@ -229,7 +247,7 @@ class ContactData extends Component {
             form = (
                 <form onSubmit={this.orderHandler}>
                     {inputElements}
-                    <Button cssClass="Success" btnType="submit">Order</Button>
+                    <Button cssClass="Success" btnType="submit" disabled={!this.state.formIsValid}>Order</Button>
                     {/* <Button cssClass="Success" clicked={this.orderHandler}>Order</Button> */}
                 </form>
             );
