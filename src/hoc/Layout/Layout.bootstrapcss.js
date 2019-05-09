@@ -2,15 +2,11 @@ import React from 'react';
 import Aux from '../../hoc/Aux'; // custom component should be imported as Aux (capitalized)
 import cssClasses from './Layout.css';
 
-/**
- * Issue: Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
- * Fix:
- *  1. add enclosing tag: <div>...</div> OR
- *  2. return as an array and add unique key to each adjacent elements OR
- *  3. with HOC (Higher Order Component) and add auxiliary tag: <Aux>...</Aux> or <Auxiliary>...</Auxiliary> for Windows
- *
- * @param {*} props
- */
+// Issue: Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
+// FIX:
+// 1. add enclosing tag: <div>...</div> OR
+// 2. return as an array and add unique key to each adjacent elements OR
+// 3. with HOC (Higher Order Component) and add auxiliary tag: <Aux>...</Aux> or <Auxiliary>...</Auxiliary> for Windows
 const layout = props => (
     <Aux>
         <header>

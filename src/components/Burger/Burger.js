@@ -3,6 +3,7 @@ import classes from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = props => {
+    // console.log('[Burger] ', props);
     /**
      * state = {
         ingredients: {
@@ -30,16 +31,6 @@ const burger = props => {
                 return <BurgerIngredient key={igKey + i} type={igKey}/>; // transforming the ingredients object into an array
             });
         })
-        /**
-         * state = {
-            ingredients: {
-                salad: 0,
-                bacon: 0,
-                cheese: 0,
-                meat: 0
-            }
-        };
-         */
         // flatten the ingredients object and concat into an array to know if object is empty
         .reduce((arr, el) => {
             // console.log('arr: ', arr);

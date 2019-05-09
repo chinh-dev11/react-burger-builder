@@ -15,6 +15,7 @@ class OrderSummanry extends Component {
         console.log('[OrderSummary] WillUpdate'); // REM: performance improvement: the OrderSummary component gets updated when adding/removing ingredients (with more/less btns) even when the Modal (OrderSummary is inside the Modal) is not showing therefore it is NOT OPTIMIZED
     } */
     render(props) {
+        // console.log('[OrderSummary] ', this.props);
         const ingredientsSummary = Object.keys(this.props.ingredients)
             .map((igKey) => {
                 return (
@@ -29,8 +30,8 @@ class OrderSummanry extends Component {
                 <ul>{ingredientsSummary}</ul>
                 <p>Total: <strong>{this.props.price.toFixed(2)}</strong></p>
                 <p>Continue to checkout?</p>
-                <Button clicked={this.props.purchaseCancelled} btnType="Danger">CANCEL</Button>
-                <Button clicked={this.props.purchaseContinued} btnType="Success">CONTINUE</Button>
+                <Button clicked={this.props.purchaseCancelled} cssClass="Danger">CANCEL</Button>
+                <Button clicked={this.props.purchaseContinued} cssClass="Success">CONTINUE</Button>
             </Aux>
         );
     };
@@ -56,8 +57,8 @@ const orderSummanry = (props) => {
             <ul>{ingredientsSummary}</ul>
             <p>Total: <strong>{props.price.toFixed(2)}</strong></p>
             <p>Continue to checkout?</p>
-            <Button clicked={props.purchaseCancelled} btnType="Danger">CANCEL</Button>
-            <Button clicked={props.purchaseContinued} btnType="Success">CONTINUE</Button>
+            <Button clicked={props.purchaseCancelled} cssClass="Danger">CANCEL</Button>
+            <Button clicked={props.purchaseContinued} cssClass="Success">CONTINUE</Button>
         </Aux>
     );
 };
