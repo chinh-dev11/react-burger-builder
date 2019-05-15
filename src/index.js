@@ -27,13 +27,13 @@ const logger = store => {
     };
 };
 
-const store = createStore(reducer, applyMiddleware(logger)); // can pass multiple middleware, which will be executed synchronously one after the other
+// const store = createStore(reducer, applyMiddleware(logger)); // can pass multiple middleware, which will be executed synchronously one after the other
 
 // Basic store
-/* const store = createStore(
+const store = createStore(
     reducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-); */
+);
 
 const app = (
     <Provider store={store}>
