@@ -7,7 +7,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 
@@ -19,21 +20,29 @@ import * as serviceWorker from './serviceWorker';
 const logger = store => {
     return next => {
         return action => {
-            // console.log('[Middleware] Dispatching', action);
+            console.log('[Middleware] Dispatching', action);
             const result = next(action);
-            // console.log('[Middleware] next state', store.getState());
+            console.log('[Middleware] next state', store.getState());
             return result;
         };
     };
 };
 
-// const store = createStore(burgerBuilderReducer, applyMiddleware(logger)); // can pass multiple middleware, which will be executed synchronously one after the other
-
-// Basic store
+// Advanced store setup
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
     burgerBuilderReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    /* preloadedState, */
+    composeEnhancers(
+        applyMiddleware(logger, thunk) // can pass multiple middleware, which will be executed synchronously one after the other
+    )
 );
+
+// Basic store
+/* const store = createStore(
+    burgerBuilderReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+); */
 
 const app = (
     <Provider store={store}>
