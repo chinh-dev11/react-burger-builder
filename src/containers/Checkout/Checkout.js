@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
-    state = {
+    /* state = {
         ingredients: null,
         totalPrice: 0
-    };
+    }; */
 
     //! TypeError: Cannot convert undefined or null to object
     /* burger
@@ -21,7 +22,7 @@ class Checkout extends Component {
         23 |         // console.log('igKey: ', igKey);
         24 |         // console.log('Array(props.ingredients[igKey]): ', Array(props.ingredients[igKey])); */
     // componentDidMount() { // REM: because componentDidMount lifecycle gets executed after all child components been rendered and mount, therefore using componentWillMount lifecycle to ensure 'this.state.ingredients' object been generated with data, thus preventing TypeError (above) of child processing on a null/undefined object
-    componentWillMount() {
+    /* componentWillMount() {
         // console.log('[Checkout] componentWillMount');
         // console.log(this.props.location.search);
         let ingredients = {};
@@ -41,7 +42,7 @@ class Checkout extends Component {
             ingredients: ingredients,
             totalPrice: price
         });
-    };
+    }; */
 
     checkoutCancelledHandler = () => {
         this.props.history.goBack(); // back to previous page
@@ -56,39 +57,45 @@ class Checkout extends Component {
         return (
             <div>
                 <CheckoutSummary
-                    ingredients={this.state.ingredients}
+                    ingredients={this.props.ings}
                     checkoutCancelled={this.checkoutCancelledHandler} // back
                     checkoutContinued={this.checkoutContinuedHandler} // next page
                 />
-                {/* <Route path={this.props.match.path + '/contact-data'} component={ContactData} /> */}
+                <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
                 {/* render manually to pass props to component */}
-                <Route
+                {/* <Route
                     path={this.props.match.path + '/contact-data'}
-                    /**
-                    REM: render manually prevents having routing props (history, location, match) avail to ContactData component
+                    
+                    // REM: render manually prevents having routing props (history, location, match) avail to ContactData component
                     // FIX:
-                    1) passing the props as argument to render()
-                        render={(props) => (
-                            <ContactData
-                                ingredients={this.state.ingredients}
-                                totalPrice={this.state.totalPrice}
-                                {...props}
-                            />
-                        )}
-                    2) OR wrapping child component (ContactData) with 'withRouter' to make routing props avail
-                        export default withRouter(ContactData);// to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component
-                     */
-                    render={(props) => (
-                        <ContactData
-                            ingredients={this.state.ingredients}
-                            totalPrice={this.state.totalPrice}
-                            {...props}
-                        />
-                    )}
-                />
+                    // 1) passing the props as argument to render()
+                    //     render={(props) => (
+                    //         <ContactData
+                    //             ingredients={this.state.ingredients}
+                    //             totalPrice={this.state.totalPrice}
+                    //             {...props}
+                    //         />
+                    //     )}
+                    // 2) OR wrapping child component (ContactData) with 'withRouter' to make routing props avail
+                        // export default withRouter(ContactData);// to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component
+                    
+                    // render={(props) => (
+                    //     <ContactData
+                    //         ingredients={this.state.ingredients}
+                    //         totalPrice={this.state.totalPrice}
+                    //         {...props}
+                    //     />
+                    // )}
+                /> */}
             </div>
         );
     }
 }
 
-export default Checkout;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients
+    };
+};
+
+export default connect(mapStateToProps)(Checkout);
