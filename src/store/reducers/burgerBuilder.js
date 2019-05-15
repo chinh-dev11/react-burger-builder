@@ -36,7 +36,14 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_INGREDIENTS:
             return {
                 ...state,
-                ingredients: action.ingredients,
+                // ingredients: action.ingredients,
+                // optional: since Firebase DB is alphabetically sorted (bacon, cheese, meat, salad) and can't be changed, therefore we could manually change the order here, if needed, as follow (though it's not RECOMMENDED since it makes the app inflexible; in case of added/removed ingredient in DB, we will have to adjust the code here)
+                ingredients: {
+                    salad: action.ingredients.salad,
+                    bacon: action.ingredients.bacon,
+                    cheese: action.ingredients.cheese,
+                    meat: action.ingredients.meat
+                },
                 error: false
             };
         case actionTypes.FETCH_INGREDIENTS_FAILED:
