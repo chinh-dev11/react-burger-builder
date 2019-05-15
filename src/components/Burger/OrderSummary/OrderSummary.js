@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 
@@ -6,10 +6,10 @@ import Button from '../../UI/Button/Button';
 // ─── CLASS-BASED COMPONENT ───────────────────────────────────────────────────────
 //
 
-class OrderSummanry extends Component {
+class OrderSummary extends Component {
     /**
      * Converted the OrderSummary to class-based component to add componentWillUpdate Hook to check if it gets re-rendering, but it does not need to be class-based component since the re-rendering validation hook componentShouldUpdate() is in Modal.js
-     * The Ordersummary is left as class-based component with componentWillUpdate Hook for debugging purposes
+     * The OrderSummary is left as class-based component with componentWillUpdate Hook for debugging purposes
      */
     /* componentWillUpdate() {
         console.log('[OrderSummary] WillUpdate'); // REM: performance improvement: the OrderSummary component gets updated when adding/removing ingredients (with more/less btns) even when the Modal (OrderSummary is inside the Modal) is not showing therefore it is NOT OPTIMIZED
@@ -19,14 +19,14 @@ class OrderSummanry extends Component {
         const ingredientsSummary = Object.keys(this.props.ingredients)
             .map((igKey) => {
                 return (
-                    <li key={igKey}><span style={{textTransform: 'capitalize'}}>{igKey}:</span> {this.props.ingredients[igKey]}</li>
+                    <li key={igKey}><span style={{ textTransform: 'capitalize' }}>{igKey}:</span> {this.props.ingredients[igKey]}</li>
                 );
             });
-            
+
         return (
             <Aux>
                 <h3>Your Order</h3>
-                <p>A delicious burger with the following ingredients:</p> 
+                <p>A delicious burger with the following ingredients:</p>
                 <ul>{ingredientsSummary}</ul>
                 <p>Total: <strong>{this.props.price.toFixed(2)}</strong></p>
                 <p>Continue to checkout?</p>
@@ -37,13 +37,13 @@ class OrderSummanry extends Component {
     };
 };
 
-export default OrderSummanry;
+export default OrderSummary;
 
 /* //
 // ─── FUNCTIONAL COMPONENT ───────────────────────────────────────────────────────
 //
 
-const orderSummanry = (props) => {
+const OrderSummary = (props) => {
     const ingredientsSummary = Object.keys(props.ingredients)
         .map((igKey) => {
             return (
@@ -63,4 +63,4 @@ const orderSummanry = (props) => {
     );
 };
 
-export default orderSummanry; */
+export default OrderSummary; */
