@@ -1,6 +1,12 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-orders';
 
+export const initPurchase = () => {
+    return {
+        type: actionTypes.INIT_PURCHASE
+    }
+};
+
 export const purchaseBurgerStart = () => {
     return {
         type: actionTypes.PURCHASE_BURGER_START

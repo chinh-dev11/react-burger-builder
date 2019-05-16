@@ -155,9 +155,8 @@ class ContactData extends Component {
     }
 
     orderHandler = (event) => {
-        // console.log(event);
-        // REM: to prevent auto request sent, hence page reload, due to form
-        event.preventDefault();
+        // console.log(event);        
+        event.preventDefault(); // REM: to prevent auto request sent, hence page reload, due to form
 
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
