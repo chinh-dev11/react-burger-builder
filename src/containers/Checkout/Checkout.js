@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
@@ -54,47 +54,52 @@ class Checkout extends Component {
 
     render(props) {
         // console.log('[Checkout] ', this.props);
-        return (
-            <div>
-                <CheckoutSummary
-                    ingredients={this.props.ings}
-                    checkoutCancelled={this.checkoutCancelledHandler} // back
-                    checkoutContinued={this.checkoutContinuedHandler} // next page
-                />
-                <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
-                {/* render manually to pass props to component */}
-                {/* <Route
-                    path={this.props.match.path + '/contact-data'}
-                    
-                    // REM: render manually prevents having routing props (history, location, match) avail to ContactData component
-                    // FIX:
-                    // 1) passing the props as argument to render()
-                    //     render={(props) => (
-                    //         <ContactData
-                    //             ingredients={this.state.ingredients}
-                    //             totalPrice={this.state.totalPrice}
-                    //             {...props}
-                    //         />
-                    //     )}
-                    // 2) OR wrapping child component (ContactData) with 'withRouter' to make routing props avail
-                        // export default withRouter(ContactData);// to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component
-                    
-                    // render={(props) => (
-                    //     <ContactData
-                    //         ingredients={this.state.ingredients}
-                    //         totalPrice={this.state.totalPrice}
-                    //         {...props}
-                    //     />
-                    // )}
-                /> */}
-            </div>
-        );
+        let summary = <Redirect to="/" />;
+        if (this.props.ings) {
+            summary = (
+                <div>
+                    <CheckoutSummary
+                        ingredients={this.props.ings}
+                        checkoutCancelled={this.checkoutCancelledHandler} // back
+                        checkoutContinued={this.checkoutContinuedHandler} // next page
+                    />
+                    <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
+                    {/* render manually to pass props to component */}
+                    {/* <Route
+                        path={this.props.match.path + '/contact-data'}
+                        
+                        // REM: render manually prevents having routing props (history, location, match) avail to ContactData component
+                        // FIX:
+                        // 1) passing the props as argument to render()
+                        //     render={(props) => (
+                        //         <ContactData
+                        //             ingredients={this.state.ingredients}
+                        //             totalPrice={this.state.totalPrice}
+                        //             {...props}
+                        //         />
+                        //     )}
+                        // 2) OR wrapping child component (ContactData) with 'withRouter' to make routing props avail
+                            // export default withRouter(ContactData);// to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component
+                        
+                        // render={(props) => (
+                        //     <ContactData
+                        //         ingredients={this.state.ingredients}
+                        //         totalPrice={this.state.totalPrice}
+                        //         {...props}
+                        //     />
+                        // )}
+                    /> */}
+                </div>
+            );
+        }
+        
+        return summary;
     }
 }
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients
+        ings: state.burgerBuilder.ingredients
     };
 };
 
