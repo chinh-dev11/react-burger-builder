@@ -7,9 +7,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import reducer from './store/reducer';
+import burgerBuilderReducer from './store/reducers/burgerBuilder';
+import orderReducer from './store/reducers/order';
 
 import './index.css';
 import App from './App';
@@ -27,11 +29,25 @@ const logger = store => {
     };
 };
 
-const store = createStore(reducer, applyMiddleware(logger)); // can pass multiple middleware, which will be executed synchronously one after the other
+// combine reducers
+const rootReducer = combineReducers({
+    burgerBuilder: burgerBuilderReducer,
+    order: orderReducer
+});
+
+// Advanced store setup
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+    rootReducer,
+    /* preloadedState, */
+    composeEnhancers(
+        applyMiddleware(logger, thunk) // can pass multiple middleware, which will be executed synchronously one after the other
+    )
+);
 
 // Basic store
 /* const store = createStore(
-    reducer,
+    burgerBuilderReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ); */
 

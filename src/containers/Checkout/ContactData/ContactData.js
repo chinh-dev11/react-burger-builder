@@ -7,6 +7,8 @@ import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions/index';
 
 class ContactData extends Component {
     state = {
@@ -108,13 +110,12 @@ class ContactData extends Component {
                         { value: 'cheapest', displayName: 'Cheapest' },
                     ]
                 },
-                value: '',
+                value: 'fastest', // by default if not touched/changed
                 validation: {}, // FIX: 1) explicitly declare empty object to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option. This is a preferred method since it keeps the form config uniformly
                 valid: true
             }
         },
-        formIsValid: false,
-        loading: false
+        formIsValid: false
     };
 
     checkValidityAndError(value, orderElement, updatedOrderElement) {
@@ -154,13 +155,8 @@ class ContactData extends Component {
     }
 
     orderHandler = (event) => {
-        // console.log(event);
-        // to prevent auto request sent, hence page reload, due to form
-        // event.preventDefault(); //! not sure it's applicable here???
-
-        this.setState({
-            loading: true
-        });
+        // console.log(event);        
+        event.preventDefault(); // REM: to prevent auto request sent, hence page reload, due to form
 
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
@@ -173,21 +169,7 @@ class ContactData extends Component {
             orderData: formData
         };
 
-        // extension .json is required for Firebase
-        axios.post('/orders.json', order)
-            .then((response) => {
-                // console.log('[ContactData] post response: ', response);
-                this.setState({
-                    loading: false
-                });
-                this.props.history.push('/'); // to root home page after placing order succeed
-            })
-            .catch((error) => {
-                // console.log('[ContactData] post error: ', error);
-                this.setState({
-                    loading: false
-                });
-            });
+        this.props.onOrderHandler(order);
     };
 
     // inputIdentifier: name, street, zipcode, country, email, deliveryMethod
@@ -243,8 +225,8 @@ class ContactData extends Component {
                 changed={(event) => this.inputChangedHandler(event, formElement.id)} />
         ));
 
-        let form = <Spinner />;
-        if (!this.state.loading) {
+        let form = this.props.error ? <p>Something went wrong!</p> : <Spinner />;
+        if (!this.props.loading) {
             form = (
                 <form onSubmit={this.orderHandler}>
                     {inputElements}
@@ -252,6 +234,8 @@ class ContactData extends Component {
                     {/* <Button cssClass="Success" clicked={this.orderHandler}>Order</Button> */}
                 </form>
             );
+        } else {
+            form = <Spinner />;
         }
         return (
             <div className={classes.ContactData}>
@@ -264,10 +248,20 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading,
+        error: state.order.error
     };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderHandler: (orderData) => { 
+            dispatch(actions.purchaseBurger(orderData)) 
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
 // export default withRouter(ContactData); // to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component
