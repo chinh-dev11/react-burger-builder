@@ -66,7 +66,6 @@ export const fetchOrdersFail = (error) => {
 };
 
 export const fetchOrders = () => {
-    
     return dispatch => {
         dispatch(fetchOrdersStart());
 

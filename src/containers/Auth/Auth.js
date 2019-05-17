@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import classes from './Auth.module.css';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import * as actions from '../../store/actions/index';
+import axios from '../../axios-orders';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const errorMessage = {
     required: 'Can\'t be empty',
@@ -48,7 +54,7 @@ class Auth extends Component {
         if (!rules) {
             return true;
         }
-        
+
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
@@ -74,8 +80,9 @@ class Auth extends Component {
 
         return isValid;
     }
-    
+
     inputChangedHandler = (evt, id) => {
+        // REM: set state immutably - nested objects
         const updatedControls = {
             ...this.state.controls,
             [id]: {
@@ -91,43 +98,66 @@ class Auth extends Component {
         });
     };
 
-    loginHandler = (evt) => {
-        console.log('login... evt: ', evt);
+    onSubmitHandler = (evt) => {
+        // console.log('onSubmitHandler... evt: ', evt);
         evt.preventDefault();
+
+        this.props.onInitAuth(this.state.controls.email.value, this.state.controls.password.value);
     };
 
-    render() {
-        // REM: transforming object to array of objects 
-        const formElementsArray = [];
-        for (let key in this.state.controls) {
-            formElementsArray.push({
-                id: key,
-                config: this.state.controls[key]
+    render(props) {
+        // console.log('props: ', this.props);
+        let authForm = <Spinner />;
+        if (!this.props.loading) {
+            // REM: transforming object to array of objects 
+            const formElementsArray = [];
+            for (let key in this.state.controls) {
+                formElementsArray.push({
+                    id: key,
+                    config: this.state.controls[key]
+                });
+            }
+            const inputElements = formElementsArray.map(formElement => {
+                return (
+                    <Input
+                        key={formElement.id}
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                    />
+                );
             });
-        }
-        const inputElements = formElementsArray.map(formElement => {
-            return (
-                <Input
-                    key={formElement.id}
-                    elementType={formElement.config.elementType}
-                    elementConfig={formElement.config.elementConfig}
-                    value={formElement.config.value}
-                    invalid={!formElement.config.valid}
-                    shouldValidate={formElement.config.validation}
-                    touched={formElement.config.touched}
-                    changed={(event) => this.inputChangedHandler(event, formElement.id)}
-                />
-            );
-        });
-        return (
-            <div className={classes.Auth}>
-                <form onSubmit={this.loginHandler}>
+            authForm = (
+                <form onSubmit={this.onSubmitHandler}>
                     {inputElements}
                     <Button cssClass="Success" btnType="submit">SUBMIT</Button>
                 </form>
+            );
+        }
+
+        return (
+            <div className={classes.Auth}>
+                {authForm}
             </div>
         );
     }
 }
 
-export default Auth;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated,
+        loading: state.auth.loading
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onInitAuth: (email, password) => dispatch(actions.initAuth(email, password))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axios));
