@@ -222,7 +222,8 @@ class ContactData extends Component {
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
                 validationError={formElement.config.validationError}
-                changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+                changed={(event) => this.inputChangedHandler(event, formElement.id)}
+            />
         ));
 
         let form = this.props.error ? <p>Something went wrong!</p> : <Spinner />;
