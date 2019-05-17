@@ -40,6 +40,26 @@ const reducer = (state = initialState, action) => {
                 purchased: false,
                 error: true
             };
+        case actionTypes.FETCH_ORDERS_START:
+            return {
+                ...state,
+                loading: true,
+                error: false
+            };
+        case actionTypes.FETCH_ORDERS_SUCCESS:
+            return {
+                ...state,
+                // orders: state.orders.concat(action.orders),
+                orders: action.orders,
+                loading: false,
+                error: false
+            };
+        case actionTypes.FETCH_ORDERS_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            };
         default:
             return state;
     }
