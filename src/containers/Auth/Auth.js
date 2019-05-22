@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import classes from './Auth.module.css';
 import Input from '../../components/UI/Input/Input';
@@ -46,7 +47,8 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             }
-        }
+        },
+        isSignUp: true
     };
 
     checkValidity(value, rules) {
@@ -102,46 +104,79 @@ class Auth extends Component {
         // console.log('onSubmitHandler... evt: ', evt);
         evt.preventDefault();
 
-        this.props.onInitAuth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
     };
+
+    switchAuthModeHandler = () => {
+        this.setState(prevState => {
+            return {
+                ...this.state,
+                isSignUp: !prevState.isSignUp
+            };
+        });
+    };
+
+    storeTokenLocal() {
+        console.log(window);
+        window.localStorage.setItem('bbIdToken', this.props.token);
+    }
 
     render(props) {
         // console.log('props: ', this.props);
-        let authForm = <Spinner />;
-        if (!this.props.loading) {
-            // REM: transforming object to array of objects 
-            const formElementsArray = [];
-            for (let key in this.state.controls) {
-                formElementsArray.push({
-                    id: key,
-                    config: this.state.controls[key]
-                });
+        if (this.props.token) {
+            this.storeTokenLocal();
+        }
+
+        let submitError = null;
+        let authForm = <Redirect to='/' />;
+        if (!this.props.userId) {
+            if (this.props.error) {
+                submitError = <span className={classes.Error}>{this.props.error.message}</span>
             }
-            const inputElements = formElementsArray.map(formElement => {
-                return (
-                    <Input
-                        key={formElement.id}
-                        elementType={formElement.config.elementType}
-                        elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value}
-                        invalid={!formElement.config.valid}
-                        shouldValidate={formElement.config.validation}
-                        touched={formElement.config.touched}
-                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
-                    />
+
+            authForm = <Spinner />;
+            if (!this.props.loading) {
+                // REM: transforming object to array of objects 
+                const formElementsArray = [];
+                for (let key in this.state.controls) {
+                    formElementsArray.push({
+                        id: key,
+                        config: this.state.controls[key]
+                    });
+                }
+                const inputElements = formElementsArray.map(formElement => {
+                    return (
+                        <Input
+                            key={formElement.id}
+                            elementType={formElement.config.elementType}
+                            elementConfig={formElement.config.elementConfig}
+                            value={formElement.config.value}
+                            invalid={!formElement.config.valid}
+                            shouldValidate={formElement.config.validation}
+                            touched={formElement.config.touched}
+                            changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                        />
+                    );
+                });
+                authForm = (
+                    <form onSubmit={this.onSubmitHandler}>
+                        {inputElements}
+                        <Button cssClass="Success" btnType="submit">SUBMIT</Button>
+                    </form>
+
                 );
-            });
-            authForm = (
-                <form onSubmit={this.onSubmitHandler}>
-                    {inputElements}
-                    <Button cssClass="Success" btnType="submit">SUBMIT</Button>
-                </form>
-            );
+            }
         }
 
         return (
             <div className={classes.Auth}>
+                {submitError}
                 {authForm}
+                <Button
+                    cssClass="Danger"
+                    btnType="button"
+                    clicked={this.switchAuthModeHandler}
+                >Switch to {this.state.isSignUp ? 'SIGNIN' : 'SIGNUP'}</Button>
             </div>
         );
     }
@@ -149,14 +184,16 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.isAuthenticated,
+        token: state.auth.token,
+        userId: state.auth.userId,
+        error: state.auth.error,
         loading: state.auth.loading
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitAuth: (email, password) => dispatch(actions.initAuth(email, password))
+        onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
     }
 }
 

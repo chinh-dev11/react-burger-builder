@@ -13,3 +13,10 @@
         width: 500px;
     }
 }
+
+.Error {
+    color: #fc4848;
+    margin-top: 5px;
+    display: block;
+    text-align: center;
+}
