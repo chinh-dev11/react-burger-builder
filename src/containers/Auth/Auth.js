@@ -116,15 +116,15 @@ class Auth extends Component {
         });
     };
 
-    storeTokenLocal() {
-        console.log(window);
+    localStoreToken() {
+        // console.log(window);
         window.localStorage.setItem('bbIdToken', this.props.token);
     }
 
     render(props) {
         // console.log('props: ', this.props);
         if (this.props.token) {
-            this.storeTokenLocal();
+            this.localStoreToken();
         }
 
         let submitError = null;

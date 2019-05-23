@@ -30,12 +30,10 @@ export const logout = () => {
 
 export const checkAuthTimeout = (expiresIn) => {
     // console.log('expiresIn: ', expiresIn);
-    // expiresIn: only avail with signup, of 3600 secs by default in Firebase, but not signin                
-    const expirationTime = expiresIn ? expiresIn : 3600; // default value if not avail (as for signin)
     return dispatch => {
         setTimeout(() => {
             dispatch(logout());
-        }, expirationTime * 1000); // setTimeout (millisecs) and expirationTime (secs) therefore 3600 * 1000 to transform to millisecs
+        }, expiresIn * 1000); // setTimeout (millisecs) and expirationTime (secs) therefore 3600 * 1000 to transform to millisecs
     };
 };
 
@@ -54,21 +52,25 @@ export const auth = (email, password, isSignUp) => {
          * API_KEY: AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo (Project Settings page - https://console.firebase.google.com/project/react-burger-builder-f2419/settings/general/)
          */
         const apiKey = 'AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo';
-        const req = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/'
+        const reqUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/'
         const endPoint = isSignUp ? 'signupNewUser' : 'verifyPassword'; // Sign Up / Sign In
         // const endPoint = 'verifyPassword'; // Sign In
-        const authReq = req + endPoint + '?key=' + apiKey;
-        const body = {
+        const payload = {
             email: email,
             password: password,
             returnSecureToken: true
-        }
-        axios.post(authReq, body)
+        };
+        const reqConfig = {
+            url: reqUrl + endPoint + '?key=' + apiKey,
+            data: payload,
+            method: 'post'
+        };
+        
+        axios(reqConfig)
             .then(response => {
                 // console.log('response: ', response);
                 dispatch(authSuccess(response.data));
 
-                // expiresIn: only avail with signup, of 3600 secs by default in Firebase, but not signin                
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             })
             .catch(err => {
