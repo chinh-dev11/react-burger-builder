@@ -61,7 +61,7 @@ export const auth = (email, password, isSignUp) => {
         const body = {
             email: email,
             password: password,
-            reSecureToken: true
+            returnSecureToken: true
         }
         axios.post(authReq, body)
             .then(response => {

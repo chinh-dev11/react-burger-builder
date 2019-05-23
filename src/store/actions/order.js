@@ -1,6 +1,10 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-orders';
 
+const validateToken = (token) => {
+    return token ? token : window.localStorage.getItem('bbIdToken');
+};
+
 export const initPurchase = () => {
     return {
         type: actionTypes.INIT_PURCHASE
@@ -27,12 +31,19 @@ export const purchaseBurgerFail = () => {
     };
 };
 
-export const purchaseBurger = (orderData) => {
+export const purchaseBurger = (orderData, token) => {
+    const reqConfig ={
+        url: '/orders.json?auth=' + validateToken(token),
+        data: orderData,
+        method: 'post'
+    }
+
     return dispatch => {
         dispatch(purchaseBurgerStart()); // to have a spinner whilst posting orders request
 
         // extension .json is required for Firebase
-        axios.post('/orders.json', orderData)
+        // axios.post('/orders.json?auth=' + authToken, orderData)
+        axios(reqConfig)
             .then((response) => {
                 // console.log('[ContactData] post response: ', response);
                 // this.props.history.push('/'); // to root home page after placing order succeed
@@ -65,11 +76,28 @@ export const fetchOrdersFail = (error) => {
     };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
+    /**
+     * Passing the token to the request
+        1) with the dispatch/state arguments - NOT RECOMMENDED
+            return (dispatch, state) => {
+                dispatch(fetchOrdersStart());
+                ...
+            }
+        2) passing token as fetchOrders argument
+            export const fetchOrders = (token) => {...}
+     */
+    const reqConfig = {
+        url: '/orders.json?auth=' + validateToken(token),
+        // url: '/orders.json',
+        // auth: authToken // REM: Firebase requires auth param in the url
+        method: 'get',
+    };
+
     return dispatch => {
         dispatch(fetchOrdersStart());
 
-        axios.get('/orders.json')
+        axios(reqConfig)
             .then(res => {
                 // console.log('res: ', res);
                 const fetchedOrders = [];
