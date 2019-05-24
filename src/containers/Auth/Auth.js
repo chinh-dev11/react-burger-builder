@@ -127,50 +127,53 @@ class Auth extends Component {
             this.localStoreToken();
         }
 
-        let submitError = null;
-        let authForm = <Redirect to='/' />;
-        if (!this.props.userId) {
-            if (this.props.error) {
-                submitError = <span className={classes.Error}>{this.props.error.message}</span>
-            }
+        let formError = null;
+        if (this.props.error) {
+            formError = <span className={classes.Error}>{this.props.error.message}</span>
+        }
 
-            authForm = <Spinner />;
-            if (!this.props.loading) {
-                // REM: transforming object to array of objects 
-                const formElementsArray = [];
-                for (let key in this.state.controls) {
-                    formElementsArray.push({
-                        id: key,
-                        config: this.state.controls[key]
-                    });
-                }
-                const inputElements = formElementsArray.map(formElement => {
-                    return (
-                        <Input
-                            key={formElement.id}
-                            elementType={formElement.config.elementType}
-                            elementConfig={formElement.config.elementConfig}
-                            value={formElement.config.value}
-                            invalid={!formElement.config.valid}
-                            shouldValidate={formElement.config.validation}
-                            touched={formElement.config.touched}
-                            changed={(event) => this.inputChangedHandler(event, formElement.id)}
-                        />
-                    );
+        let authRedirect = null;
+        if (this.props.isAuthenticated) {
+            authRedirect = <Redirect to={this.props.authRedirectPath} />;
+        }
+        
+        let authForm = <Spinner />;
+        if (!this.props.loading) {
+            // REM: transforming object to array of objects 
+            const formElementsArray = [];
+            for (let key in this.state.controls) {
+                formElementsArray.push({
+                    id: key,
+                    config: this.state.controls[key]
                 });
-                authForm = (
-                    <form onSubmit={this.onSubmitHandler}>
-                        {inputElements}
-                        <Button cssClass="Success" btnType="submit">SUBMIT</Button>
-                    </form>
-
-                );
             }
+            const inputElements = formElementsArray.map(formElement => {
+                return (
+                    <Input
+                        key={formElement.id}
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                    />
+                );
+            });
+            authForm = (
+                <form onSubmit={this.onSubmitHandler}>
+                    {inputElements}
+                    <Button cssClass="Success" btnType="submit">SUBMIT</Button>
+                </form>
+
+            );
         }
 
         return (
             <div className={classes.Auth}>
-                {submitError}
+                {authRedirect}
+                {formError}
                 {authForm}
                 <Button
                     cssClass="Danger"
@@ -185,9 +188,10 @@ class Auth extends Component {
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
-        userId: state.auth.userId,
+        isAuthenticated: state.auth.token !== null,
         error: state.auth.error,
-        loading: state.auth.loading
+        loading: state.auth.loading,
+        authRedirectPath: state.auth.authRedirectPath
     };
 };
 
@@ -195,6 +199,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axios));
