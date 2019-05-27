@@ -37,6 +37,7 @@ export const authFail = (error) => {
 
 export const logout = () => {
     // console.log('logout()');
+    // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
     localStorage.removeItem(localStorageKeys.tokenId);
     localStorage.removeItem(localStorageKeys.tokenExpiredDate);
     return {
@@ -85,8 +86,8 @@ export const auth = (email, password, isSignUp) => {
                 // res.data.expiresIn = 30;
                 const expiresInMillisecs = res.data.expiresIn * 1000; // REM: transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
                 const expiredDate = new Date(Date.now() + expiresInMillisecs); // Fri May 24 2019 12:30:23 GMT-0400 (GMT-04:00)
-                console.log('expiredDate: ', expiredDate);
 
+                // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
                 localStorage.setItem(localStorageKeys.tokenId, res.data.idToken);
                 localStorage.setItem(localStorageKeys.tokenExpiredDate, expiredDate);
 
