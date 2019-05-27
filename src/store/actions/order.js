@@ -1,10 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-orders';
 
-const validateToken = (token) => {
-    return token ? token : window.localStorage.getItem('bbIdToken');
-};
-
 export const initPurchase = () => {
     return {
         type: actionTypes.INIT_PURCHASE
@@ -33,7 +29,7 @@ export const purchaseBurgerFail = () => {
 
 export const purchaseBurger = (orderData, token) => {
     const reqConfig ={
-        url: '/orders.json?auth=' + validateToken(token),
+        url: '/orders.json?auth=' + token,
         data: orderData,
         method: 'post'
     }
@@ -88,7 +84,7 @@ export const fetchOrders = (token) => {
             export const fetchOrders = (token) => {...}
      */
     const reqConfig = {
-        url: '/orders.json?auth=' + validateToken(token),
+        url: '/orders.json?auth=' + token,
         // url: '/orders.json',
         // auth: authToken // REM: Firebase requires auth param in the url
         method: 'get',

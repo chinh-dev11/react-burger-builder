@@ -116,17 +116,8 @@ class Auth extends Component {
         });
     };
 
-    localStoreToken() {
-        // console.log(window);
-        window.localStorage.setItem('bbIdToken', this.props.token);
-    }
-
     render(props) {
         // console.log('props: ', this.props);
-        if (this.props.token) {
-            this.localStoreToken();
-        }
-
         let formError = null;
         if (this.props.error) {
             formError = <span className={classes.Error}>{this.props.error.message}</span>
