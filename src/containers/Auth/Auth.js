@@ -9,6 +9,7 @@ import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 const errorMessage = {
     required: 'Can\'t be empty',
@@ -51,41 +52,9 @@ class Auth extends Component {
         isSignUp: true
     };
 
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        // REM: email validation pattern
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        if (rules.isNumeric) {
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        return isValid;
-    }
-
     inputChangedHandler = (evt, id) => {
         // REM: set state immutably - nested objects
-        const updatedControls = {
+        /* const updatedControls = {
             ...this.state.controls,
             [id]: {
                 ...this.state.controls[id],
@@ -93,7 +62,21 @@ class Auth extends Component {
                 valid: this.checkValidity(evt.target.value, this.state.controls[id].validation),
                 touched: true
             }
-        };
+        }; */
+        // using updateObject utility
+        const updatedControls = updateObject(
+            this.state.controls,
+            {
+                [id]: updateObject(
+                    this.state.controls[id],
+                    {
+                        value: evt.target.value,
+                        valid: checkValidity(evt.target.value, this.state.controls[id].validation),
+                        touched: true
+                    }
+                )
+            }
+        );
 
         this.setState({
             controls: updatedControls
@@ -127,7 +110,7 @@ class Auth extends Component {
         if (this.props.isAuthenticated) {
             authRedirect = <Redirect to={this.props.authRedirectPath} />;
         }
-        
+
         let authForm = <Spinner />;
         if (!this.props.loading) {
             // REM: transforming object to array of objects 

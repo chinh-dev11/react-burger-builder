@@ -9,6 +9,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
+import { updateObject, checkValidityAndError } from '../../../shared/utility';
 
 class ContactData extends Component {
     state = {
@@ -118,42 +119,6 @@ class ContactData extends Component {
         formIsValid: false
     };
 
-    checkValidityAndError(value, orderElement, updatedOrderElement) {
-        let isValid = true;
-
-        if (!orderElement.validation) {
-            return true; // FIX: 2) to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option
-        }
-
-        if (orderElement.validation.required) {
-            if (value.trim() !== '') {
-                isValid = true;
-            } else {
-                isValid = false;
-                updatedOrderElement.validationError = orderElement.errorType.empty;
-            }
-        }
-
-        if (orderElement.validation.minLength) {
-            isValid = value.length >= orderElement.validation.minLength && isValid;
-
-            if (value.length < orderElement.validation.minLength) {
-                updatedOrderElement.validationError = orderElement.errorType.minLength;
-            }
-        }
-
-        if (orderElement.validation.maxLength) {
-            isValid = value.length <= orderElement.validation.maxLength && isValid;
-
-            if (value.length > orderElement.validation.maxLength) {
-                updatedOrderElement.validationError = orderElement.errorType.maxLength;
-            }
-        }
-
-        // console.log(orderElement);
-        return isValid;
-    }
-
     orderHandler = (event) => {
         // console.log(event);        
         event.preventDefault(); // REM: to prevent auto request sent, hence page reload, due to form
@@ -175,20 +140,29 @@ class ContactData extends Component {
 
     // inputIdentifier: name, street, zipcode, country, email, deliveryMethod
     inputChangedHandler = (evt, inputIdentifier) => {
-        // console.log(inputIdentifier);
-        // console.log(evt.target.value);
-        const updatedOrderForm = { ...this.state.orderForm }; // clone (a copy) of orderForm by spreading the object
-        // console.log(updatedOrderForm);
+        // const updatedOrderForm = { ...this.state.orderForm }; // clone (a copy) of orderForm by spreading the object
         // REM: spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
-        const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
-        // console.log(updatedOrderElement);
+        /* const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
         updatedOrderElement.value = evt.target.value;
         updatedOrderElement.valid = this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], updatedOrderElement);
-        // updatedOrderElement.valid = this.checkValidity(evt.target.value, this.state.orderForm[inputIdentifier].validation, this.state.orderForm[inputIdentifier], updatedOrderElement);
-        updatedOrderElement.touched = true;
-        // console.log(updatedOrderElement);
-        updatedOrderForm[inputIdentifier] = updatedOrderElement;
-        // console.log(updatedOrderForm);
+        updatedOrderElement.touched = true; */
+        // using updateObject utility to replace the above lines
+        const updatedOrderElement = updateObject(
+            this.state.orderForm[inputIdentifier],
+            {
+                value: evt.target.value,
+                ...checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier]),
+                touched: true
+            }
+        );
+
+        // updatedOrderForm[inputIdentifier] = updatedOrderElement;
+        const updatedOrderForm = updateObject(
+            this.state.orderForm,
+            {
+                [inputIdentifier]: updatedOrderElement
+            }
+        );
 
         let formIsValid = true;
 
@@ -261,8 +235,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderHandler: (orderData, token) => { 
-            dispatch(actions.purchaseBurger(orderData, token)) 
+        onOrderHandler: (orderData, token) => {
+            dispatch(actions.purchaseBurger(orderData, token))
         }
     }
 };
