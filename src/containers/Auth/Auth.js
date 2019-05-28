@@ -9,6 +9,7 @@ import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import { updateObject } from '../../shared/utility';
 
 const errorMessage = {
     required: 'Can\'t be empty',
@@ -85,7 +86,7 @@ class Auth extends Component {
 
     inputChangedHandler = (evt, id) => {
         // REM: set state immutably - nested objects
-        const updatedControls = {
+        /* const updatedControls = {
             ...this.state.controls,
             [id]: {
                 ...this.state.controls[id],
@@ -93,7 +94,21 @@ class Auth extends Component {
                 valid: this.checkValidity(evt.target.value, this.state.controls[id].validation),
                 touched: true
             }
-        };
+        }; */
+        // using updateObject utility
+        const updatedControls = updateObject(
+            this.state.controls,
+            {
+                [id]: updateObject(
+                    this.state.controls[id],
+                    {
+                        value: evt.target.value,
+                        valid: this.checkValidity(evt.target.value, this.state.controls[id].validation),
+                        touched: true
+                    }
+                )
+            }
+        );
 
         this.setState({
             controls: updatedControls
@@ -127,7 +142,7 @@ class Auth extends Component {
         if (this.props.isAuthenticated) {
             authRedirect = <Redirect to={this.props.authRedirectPath} />;
         }
-        
+
         let authForm = <Spinner />;
         if (!this.props.loading) {
             // REM: transforming object to array of objects 
