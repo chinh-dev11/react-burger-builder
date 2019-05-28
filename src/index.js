@@ -39,7 +39,8 @@ const rootReducer = combineReducers({
 });
 
 // Advanced store setup
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// REM: because of how the project was setup, we can use the environment variables (process.env.NODE_ENV) to use Redux DevTool, which exposes the app Redux store, when in development environment only
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const store = createStore(
     rootReducer,
     /* preloadedState, */
