@@ -166,7 +166,8 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ings,
             price: this.props.price, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         };
 
         this.props.onOrderHandler(order, this.props.token);
@@ -253,7 +254,8 @@ const mapStateToProps = state => {
         price: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
         error: state.order.error,
-        token: state.auth.token
+        token: state.auth.token,
+        userId: state.auth.userId
     };
 };
 

@@ -28,7 +28,7 @@ export const purchaseBurgerFail = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-    const reqConfig ={
+    const reqConfig = {
         url: '/orders.json?auth=' + token,
         data: orderData,
         method: 'post'
@@ -72,7 +72,7 @@ export const fetchOrdersFail = (error) => {
     };
 };
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
     /**
      * Passing the token to the request
         1) with the dispatch/state arguments - NOT RECOMMENDED
@@ -83,13 +83,33 @@ export const fetchOrders = (token) => {
         2) passing token as fetchOrders argument
             export const fetchOrders = (token) => {...}
      */
+    const queryParams = {
+        auth: 'auth=' + token,
+        orderBy: 'orderBy="userId"', // orderBy must be a valid JSON encoded path (as a string)
+        equalTo: 'equalTo="' + userId + '"' // Constraint index field must be a JSON primitive (as a string)
+    };
+    // Firebase Console
+    // Index not defined, add ".indexOn": "userId", for path "/orders", to the rules
+    /* {
+        "rules": {
+          "ingredients": {
+            ".read": true,
+            ".write": true
+          },
+          "orders": {
+            ".read": "auth != null",
+            ".write": "auth != null",
+            ".indexOn": "userId"
+          },
+        }
+      } */
     const reqConfig = {
-        url: '/orders.json?auth=' + token,
+        url: '/orders.json?' + queryParams.auth + '&' + queryParams.orderBy + '&' + queryParams.equalTo,
         // url: '/orders.json',
         // auth: authToken // REM: Firebase requires auth param in the url
         method: 'get',
     };
-
+    // https://react-burger-builder-f2419.firebaseio.com/orders.json?auth=eyJ...&orderBy="userId"&equalTo="ZFP85PgI76gKVfMGPqqidK86Z242"
     return dispatch => {
         dispatch(fetchOrdersStart());
 
@@ -107,7 +127,7 @@ export const fetchOrders = (token) => {
                 dispatch(fetchOrdersSuccess(fetchedOrders));
             })
             .catch(err => {
-                // console.log('err: ', err);
+                console.log('err: ', err);
                 dispatch(fetchOrdersFail(err));
             });
     };
