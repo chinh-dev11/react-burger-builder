@@ -166,10 +166,11 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ings,
             price: this.props.price, //* in real-world, the price would be calculated in the backend (server) thus preventing any price manipulation 
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         };
 
-        this.props.onOrderHandler(order);
+        this.props.onOrderHandler(order, this.props.token);
     };
 
     // inputIdentifier: name, street, zipcode, country, email, deliveryMethod
@@ -222,7 +223,8 @@ class ContactData extends Component {
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
                 validationError={formElement.config.validationError}
-                changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+                changed={(event) => this.inputChangedHandler(event, formElement.id)}
+            />
         ));
 
         let form = this.props.error ? <p>Something went wrong!</p> : <Spinner />;
@@ -251,14 +253,16 @@ const mapStateToProps = state => {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
-        error: state.order.error
+        error: state.order.error,
+        token: state.auth.token,
+        userId: state.auth.userId
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderHandler: (orderData) => { 
-            dispatch(actions.purchaseBurger(orderData)) 
+        onOrderHandler: (orderData, token) => { 
+            dispatch(actions.purchaseBurger(orderData, token)) 
         }
     }
 };
