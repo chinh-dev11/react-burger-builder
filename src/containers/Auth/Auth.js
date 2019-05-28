@@ -9,7 +9,7 @@ import * as actions from '../../store/actions/index';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import { updateObject } from '../../shared/utility';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 const errorMessage = {
     required: 'Can\'t be empty',
@@ -52,38 +52,6 @@ class Auth extends Component {
         isSignUp: true
     };
 
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        // REM: email validation pattern
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        if (rules.isNumeric) {
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        return isValid;
-    }
-
     inputChangedHandler = (evt, id) => {
         // REM: set state immutably - nested objects
         /* const updatedControls = {
@@ -103,7 +71,7 @@ class Auth extends Component {
                     this.state.controls[id],
                     {
                         value: evt.target.value,
-                        valid: this.checkValidity(evt.target.value, this.state.controls[id].validation),
+                        valid: checkValidity(evt.target.value, this.state.controls[id].validation),
                         touched: true
                     }
                 )

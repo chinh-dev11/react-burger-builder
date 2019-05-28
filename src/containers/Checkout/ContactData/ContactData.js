@@ -9,7 +9,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
-import { updateObject } from '../../../shared/utility';
+import { updateObject, checkValidityAndError } from '../../../shared/utility';
 
 class ContactData extends Component {
     state = {
@@ -119,45 +119,6 @@ class ContactData extends Component {
         formIsValid: false
     };
 
-    checkValidityAndError(value, orderElement) {
-        let checked = {
-            valid: true,
-            validationError: ''
-        };
-
-        if (!orderElement.validation) {
-            return true; // FIX: 2) to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option
-        }
-
-        if (orderElement.validation.required) {
-            if (value.trim() !== '') {
-                checked.valid = true;
-            } else {
-                checked.valid = false;
-                checked.validationError = orderElement.errorType.empty;
-            }
-        }
-
-        if (orderElement.validation.minLength) {
-            checked.valid = value.length >= orderElement.validation.minLength && checked.valid;
-
-            if (value.length < orderElement.validation.minLength) {
-                checked.validationError = orderElement.errorType.minLength;
-            }
-        }
-
-        if (orderElement.validation.maxLength) {
-            checked.valid = value.length <= orderElement.validation.maxLength && checked.valid;
-
-            if (value.length > orderElement.validation.maxLength) {
-                checked.validationError = orderElement.errorType.maxLength;
-            }
-        }
-
-        // console.log(orderElement);
-        return checked;
-    }
-
     orderHandler = (event) => {
         // console.log(event);        
         event.preventDefault(); // REM: to prevent auto request sent, hence page reload, due to form
@@ -181,18 +142,16 @@ class ContactData extends Component {
     inputChangedHandler = (evt, inputIdentifier) => {
         // const updatedOrderForm = { ...this.state.orderForm }; // clone (a copy) of orderForm by spreading the object
         // REM: spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
-        // const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
-        // updatedOrderElement.value = evt.target.value;
-        // updatedOrderElement.valid = this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], updatedOrderElement);
-        // updatedOrderElement.touched = true;
-
+        /* const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
+        updatedOrderElement.value = evt.target.value;
+        updatedOrderElement.valid = this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], updatedOrderElement);
+        updatedOrderElement.touched = true; */
         // using updateObject utility to replace the above lines
         const updatedOrderElement = updateObject(
             this.state.orderForm[inputIdentifier],
             {
                 value: evt.target.value,
-                // valid: this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], this.state.orderForm[inputIdentifier]),
-                ...this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier]),
+                ...checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier]),
                 touched: true
             }
         );
