@@ -21,7 +21,7 @@ const authSuccess = (state, action) => {
     // console.log('action: ', action);
     const newState = {
         token: action.idToken,
-        userId: action.localId,
+        userId: action.userId,
         error: null,
         loading: false,
     };
