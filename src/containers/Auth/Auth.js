@@ -11,11 +11,11 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { updateObject, checkValidity } from '../../shared/utility';
 
-const errorMessage = {
+/* const errorMessage = {
     required: 'Can\'t be empty',
     email: 'Format: xxx@xxx.xxx',
     minLength: 'Length of 6 characters minimum'
-};
+}; */
 
 class Auth extends Component {
     state = {
