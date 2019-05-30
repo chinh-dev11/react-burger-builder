@@ -1,12 +1,14 @@
-import React, { Component, Suspense } from 'react';
+import React, { Component } from 'react';
+// import React, { Component, Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import * as actions from './store/actions/index';
-import Spinner from './components/UI/Spinner/Spinner';
+// import Spinner from './components/UI/Spinner/Spinner';
 import asyncComponent from './hoc/asyncComponent/asyncComponent';
+// import withErrorHandler from './hoc/withErrorHandler/withErrorHandler';
 
 const Async = {
   Auth: asyncComponent(() => {
@@ -92,3 +94,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(App));
