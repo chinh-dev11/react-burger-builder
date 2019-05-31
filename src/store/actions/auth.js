@@ -23,7 +23,7 @@ export const authSuccess = (idToken, localId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         idToken: idToken,
-        localId: localId
+        userId: localId
     };
 };
 

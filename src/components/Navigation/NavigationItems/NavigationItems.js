@@ -6,15 +6,15 @@ import NavigationItem from './NavigationItem/NavigationItem';
 const navigationItems = (props) => {
     // console.log('props: ', props);
     const navItem = {
-        link: props.isAuthenticated ? '/logout' : '/auth',
-        label: props.isAuthenticated ? 'Logout' : 'Authentication'
-    };
+        orders: props.isAuthenticated ? <NavigationItem link="/orders">Orders</NavigationItem> : null,
+        authentication: props.isAuthenticated ? <NavigationItem link="/logout">Logout</NavigationItem> : <NavigationItem link="/auth">Authentication</NavigationItem>
+    }
 
     return (
         <ul className={classes.NavigationItems}>
             <NavigationItem link="/" exact>Burger Builder</NavigationItem>
-            {props.isAuthenticated ? <NavigationItem link="/orders">Orders</NavigationItem> : null}
-            <NavigationItem link={navItem.link}>{navItem.label}</NavigationItem>
+            {navItem.orders}
+            {navItem.authentication}
         </ul>
     );
 };

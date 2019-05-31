@@ -11,7 +11,16 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+// REM: import the component in test file (BurgerBuilder.test.js) for shallow rendering will cause the following error, due to the use of 'connect' (Redux store), therefore export explicitly the component as 'export class BurgerBuilder extends Component {...}' to be imported in test file :
+/* 
+Error: Invariant Violation: Could not find "store" in the context of "Connect(_temp)". Either wrap the root component in a <Provider>, or pass a custom React context provider to <Provider> and the corresponding React context consumer to Connect(_temp) in connect options.
+
+    > 30 |         wrapper = shallow(<BurgerBuilder onInitIngredients={() => {}} onSetAuthRedirectPath={() => {}} />);
+         |                   ^
+      31 |     });
+*/
+export class BurgerBuilder extends Component {
+// class BurgerBuilder extends Component {
     // old way
     /* constructor(props) {
         super(props);
