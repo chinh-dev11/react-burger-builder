@@ -38,10 +38,11 @@ export const authFail = (error) => {
 export const logout = () => {
     // console.log('logout()');
     // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
-    localStorage.removeItem(localStorageKeys.tokenId);
-    localStorage.removeItem(localStorageKeys.tokenExpiredDate);
+    // localStorage.removeItem(localStorageKeys.tokenId);
+    // localStorage.removeItem(localStorageKeys.tokenExpiredDate);
     return {
-        type: actionTypes.AUTH_LOGOUT
+        // type: actionTypes.AUTH_LOGOUT
+        type: actionTypes.AUTH_INITIATE_LOGOUT
     };
 };
 
