@@ -94,6 +94,58 @@ export function* authUserSaga(action) {
             dispatch(authFail(err));
         });
         */
-       yield put(actions.authFail(err));
+        yield put(actions.authFail(err));
     }
-};
+}
+
+export function* authCheckStateSaga() {
+    const tokenStored = localStorage.getItem(localStorageKeys.tokenId);
+    const expiredDateStored = (new Date(localStorage.getItem(localStorageKeys.tokenExpiredDate)).getTime()); // transform tokenExpiredDate string into millisecs with getTime() of Date object
+    const expirationTime = expiredDateStored - Date.now();
+
+    // REM: authSuccess() requires 'idToken' and 'localId' (see authSuccess() in auth reducer)
+    // Solutions:
+    /* 
+        1) store 'localId' in localStorage, as with 'idToken', in auth() above, and passing by getting them from localStorage when dispatching authSuccess() as:
+            dispatch(authSuccess(localStorage.getItem('bbTokenId'), localStorage.getItem('bbLocalId'));
+            * Remember to remove 'localId' from localStorage when logout()
+    
+        2) Getting the user data from Firebase Rest API as follow:
+        */
+    /**
+     * Get user data
+     * https://firebase.google.com/docs/reference/rest/auth#section-get-account-info
+     * Endpoint: https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=[API_KEY] 
+     *  */
+    if (tokenStored && expirationTime > 0) { // auto signin
+        const endPoint = '/getAccountInfo';
+        const payload = {
+            idToken: tokenStored
+        };
+        const reqConfig = {
+            url: fireBaseConfig.reqUrl + endPoint + '?key=' + fireBaseConfig.apiKey,
+            data: payload,
+            method: 'post'
+        };
+
+        // REM: replacing 'then' with yield (next-gen JS)
+        /**
+         * axios: returns a promise
+         * yield: waits until it gets the response|error, hence no longer require 'then' to execute the inner code (authSuccess(tokenStored,...), but instead it will execute the following code once 'res' is resolved
+         */
+        // axios(reqConfig)
+        try {
+            const res = yield axios(reqConfig);
+            // .then(res => {
+            // console.log('res: ', res);
+            yield put(actions.authSuccess(tokenStored, res.data.users[0].localId));
+            yield put(actions.checkAuthTimeout(expirationTime));
+        } catch (err) {
+            // .catch(err => {
+            // console.log('err: ', err);
+            yield put(actions.authFail(err));
+        }
+    } else { // auto signout
+        yield put(actions.logout());
+    }
+}
