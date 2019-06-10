@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'; // not using the custom axios (axios.orders)
 
 import * as actionTypes from './actionTypes';
 
@@ -67,51 +67,12 @@ export const checkAuthTimeout = (expirationTime) => {
 
 export const auth = (email, password, isSignUp) => {
     // console.log('email, password, isSignUp: ', email, password, isSignUp);
-    return dispatch => {
-        dispatch(authStart());
-
-        /**
-         * Ref: https://firebase.google.com/docs/reference/rest/auth
-         * Endpoints
-         *      Sign Up: https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=[API_KEY]
-         *                  ref: https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
-         *      Sign In: https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=[API_KEY]
-         *                  ref: https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-         * API_KEY: AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo (Project Settings page - https://console.firebase.google.com/project/react-burger-builder-f2419/settings/general/)
-         */
-        // const apiKey = 'AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo';
-        // const reqUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/'
-        const endPoint = isSignUp ? '/signupNewUser' : '/verifyPassword'; // Sign Up / Sign In
-        const payload = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        };
-        const reqConfig = {
-            url: fireBaseConfig.reqUrl + endPoint + '?key=' + fireBaseConfig.apiKey,
-            data: payload,
-            method: 'post'
-        };
-
-        axios(reqConfig)
-            .then(res => {
-                // console.log('res: ', res);
-                // res.data.expiresIn = 30;
-                const expiresInMillisecs = res.data.expiresIn * 1000; // REM: transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
-                const expiredDate = new Date(Date.now() + expiresInMillisecs); // Fri May 24 2019 12:30:23 GMT-0400 (GMT-04:00)
-
-                // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
-                localStorage.setItem(localStorageKeys.tokenId, res.data.idToken);
-                localStorage.setItem(localStorageKeys.tokenExpiredDate, expiredDate);
-
-                dispatch(authSuccess(res.data.idToken, res.data.localId));
-                dispatch(checkAuthTimeout(expiresInMillisecs));
-            })
-            .catch(err => {
-                // console.log('err: ', err);
-                dispatch(authFail(err));
-            });
-    };
+    return {
+        type: actionTypes.AUTH_USER,
+        email: email,
+        password: password,
+        isSignUp: isSignUp
+    }
 };
 
 export const setAuthRedirectPath = (path) => {
