@@ -19,7 +19,7 @@ import authReducer from './store/reducers/auth';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { watchAuth } from './store/sagas/';
+import { watchAuth, watchBurgerBuilder, watchOrder } from './store/sagas';
 
 // Middleware
 const logger = store => {
@@ -54,7 +54,8 @@ const store = createStore(
 );
 
 sagaMiddleware.run(watchAuth);
-
+sagaMiddleware.run(watchBurgerBuilder);
+sagaMiddleware.run(watchOrder);
 
 // Basic store
 /* const store = createStore(

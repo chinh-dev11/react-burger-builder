@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
+// import axios from '../../axios-orders';
 
 export const initPurchase = () => {
     return {
@@ -28,7 +28,8 @@ export const purchaseBurgerFail = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-    const reqConfig = {
+    // REM: moved to purchaseBurgerSaga() using redux-saga
+    /* const reqConfig = {
         url: '/orders.json?auth=' + token,
         data: orderData,
         method: 'post'
@@ -40,15 +41,20 @@ export const purchaseBurger = (orderData, token) => {
         // extension .json is required for Firebase
         // axios.post('/orders.json?auth=' + authToken, orderData)
         axios(reqConfig)
-            .then((response) => {
-                // console.log('[ContactData] post response: ', response);
+            .then((res) => {
+                // console.log('[ContactData] post res: ', res);
                 // this.props.history.push('/'); // to root home page after placing order succeed
-                dispatch(purchaseBurgerSuccess(response.data.name, orderData));
+                dispatch(purchaseBurgerSuccess(res.data.name, orderData));
             })
             .catch((error) => {
                 // console.log('[ContactData] post error: ', error);
                 dispatch(purchaseBurgerFail());
             });
+    }; */
+    return {
+        type: actionTypes.PURCHASE_BURGER,
+        orderData: orderData,
+        token: token
     };
 };
 
@@ -73,6 +79,7 @@ export const fetchOrdersFail = (error) => {
 };
 
 export const fetchOrders = (token, userId) => {
+    // REM: moved to ordersFetchSaga() using redux-saga
     /**
      * Passing the token to the request
         1) with the dispatch/state arguments - NOT RECOMMENDED
@@ -83,11 +90,11 @@ export const fetchOrders = (token, userId) => {
         2) passing token as fetchOrders argument
             export const fetchOrders = (token) => {...}
      */
-    const queryParams = {
-        auth: 'auth=' + token,
+    /* const queryParams = {
+        auth: 'auth=' + action.token,
         orderBy: 'orderBy="userId"', // orderBy must be a valid JSON encoded path (as a string)
-        equalTo: 'equalTo="' + userId + '"' // Constraint index field must be a JSON primitive (as a string)
-    };
+        equalTo: 'equalTo="' + action.userId + '"' // Constraint index field must be a JSON primitive (as a string)
+    }; */
     // Firebase Console
     // Index not defined, add ".indexOn": "userId", for path "/orders", to the rules
     /* {
@@ -103,16 +110,15 @@ export const fetchOrders = (token, userId) => {
           },
         }
       } */
-    const reqConfig = {
+    /* const reqConfig = {
         url: '/orders.json?' + queryParams.auth + '&' + queryParams.orderBy + '&' + queryParams.equalTo,
         // url: '/orders.json',
         // auth: authToken // REM: Firebase requires auth param in the url
         method: 'get',
-    };
+    }; */
     // https://react-burger-builder-f2419.firebaseio.com/orders.json?auth=eyJ...&orderBy="userId"&equalTo="ZFP85PgI76gKVfMGPqqidK86Z242"
-    return dispatch => {
+    /* return dispatch => {
         dispatch(fetchOrdersStart());
-
         axios(reqConfig)
             .then(res => {
                 // console.log('res: ', res);
@@ -130,5 +136,10 @@ export const fetchOrders = (token, userId) => {
                 // console.log('err: ', err);
                 dispatch(fetchOrdersFail(err));
             });
+    }; */
+    return {
+        type: actionTypes.ORDERS_FETCH,
+        token: token,
+        userId: userId
     };
 };
