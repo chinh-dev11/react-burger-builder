@@ -9,5 +9,5 @@ export function* watchAuth() {
     yield takeEvery(actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga);
     yield takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga);
     yield takeEvery(actionTypes.AUTH_USER, authUserSaga);
-    yield takeEvery(actionTypes.AUTH_CHECK_INITIAL_STATE, authCheckStateSaga);
+    yield takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga);
 }
