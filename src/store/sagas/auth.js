@@ -1,4 +1,4 @@
-import { put, delay } from 'redux-saga/effects';
+import { put, delay, call } from 'redux-saga/effects';
 import axios from 'axios'; // not using the custom axios (axios.orders)
 
 import * as actions from '../actions/index';
@@ -14,11 +14,14 @@ const localStorageKeys = {
 };
 
 // REM: function*: generators, next generation JS feature, are functions which can be executed incrementally. They can be paused during function's execution, for example to wait for async code to finish
-export function* logoutSaga(action) {
+export function* logoutSaga() {
     // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
-    // yield (next-gen JS): execute and wait for code termination before executing the next line of code
-    yield localStorage.removeItem(localStorageKeys.tokenId);
-    yield localStorage.removeItem(localStorageKeys.tokenExpiredDate);
+    // REM: yield (next-gen JS): execute and wait for code termination before executing the next line of code
+    // yield localStorage.removeItem(localStorageKeys.tokenId);
+    // REM: call: use to easily mocked and test the generator without necessarily execute the code
+    yield call([localStorage, 'removeItem'], localStorageKeys.tokenId);
+    // yield localStorage.removeItem(localStorageKeys.tokenExpiredDate);
+    yield call([localStorage, 'removeItem'], localStorageKeys.tokenExpiredDate);
 
     // put: dispatch an action
     yield put(actions.logoutSucceed());
