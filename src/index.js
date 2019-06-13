@@ -10,6 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
 
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
@@ -18,6 +19,7 @@ import authReducer from './store/reducers/auth';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { watchAuth, watchBurgerBuilder, watchOrder } from './store/sagas';
 
 // Middleware
 const logger = store => {
@@ -30,6 +32,8 @@ const logger = store => {
         };
     };
 };
+
+const sagaMiddleware = createSagaMiddleware();
 
 // combine reducers
 const rootReducer = combineReducers({
@@ -45,9 +49,13 @@ const store = createStore(
     rootReducer,
     /* preloadedState, */
     composeEnhancers(
-        applyMiddleware(logger, thunk) // can pass multiple middleware, which will be executed synchronously one after the other
+        applyMiddleware(logger, thunk, sagaMiddleware) // can pass multiple middleware, which will be executed synchronously one after the other
     )
 );
+
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBurgerBuilder);
+sagaMiddleware.run(watchOrder);
 
 // Basic store
 /* const store = createStore(
