@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 // import React, { Component, Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -32,7 +32,9 @@ const Async = {
   Logout: React.lazy(() => import('./containers/Auth/Logout/Logout'))
 }; */
 
-class App extends Component {
+const app = (props) => {  
+  // console.log('[app] props: ', props);
+// class App extends Component {
   // test purposes: removing interceptors registered in withErrorHandler
   /* state = {show: true};
   componentDidMount() {
@@ -40,11 +42,16 @@ class App extends Component {
       this.setState({show:false});
     }, 3000);
   } */
-  componentWillMount() {
-    this.props.onTryAutoSignup();
-  }
 
-  render() {
+  useEffect(() => {
+    props.onTryAutoSignup();
+  }, []);
+  /* componentWillMount() {
+    this.props.onTryAutoSignup();
+  } */
+
+  // render(props) {
+    // console.log('[App] props: ', this.props);
     let routes = (
       <Switch>
         {/* <Route path="/auth" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Auth /></Suspense>} /> */}
@@ -54,7 +61,10 @@ class App extends Component {
       </Switch>
     );
 
-    if (this.props.isAuthenticated) {
+    // console.log('props.isAuthenticated: ', props.isAuthenticated);
+    if (props.isAuthenticated) {
+    // console.log('this.props.isAuthenticated: ', this.props.isAuthenticated);
+    // if (this.props.isAuthenticated) {
       routes =
         (<Switch>
           {/* <Route path="/orders" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Orders /></Suspense>} />
@@ -79,7 +89,7 @@ class App extends Component {
         </Layout>
       </div>
     );
-  }
+  // }
 }
 
 const mapStateToProps = state => {
@@ -93,5 +103,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(app);
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(App));
