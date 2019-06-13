@@ -1,16 +1,15 @@
-import React, { Component, useEffect } from 'react';
-// import React, { Component, Suspense } from 'react';
+import React, { Component, useEffect, Suspense, lazy } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import * as actions from './store/actions/index';
-// import Spinner from './components/UI/Spinner/Spinner';
-import asyncComponent from './hoc/asyncComponent/asyncComponent';
+import Spinner from './components/UI/Spinner/Spinner';
+// import asyncComponent from './hoc/asyncComponent/asyncComponent';
 // import withErrorHandler from './hoc/withErrorHandler/withErrorHandler';
 
-const Async = {
+/* const Async = {
   Auth: asyncComponent(() => {
     return import('./containers/Auth/Auth');
   }),
@@ -23,14 +22,14 @@ const Async = {
   Logout: asyncComponent(() => {
     return import('./containers/Auth/Logout/Logout');
   })
-};
-
-/* const lazyLoading = {
-  Auth: React.lazy(() => import('./containers/Auth/Auth')),
-  Orders: React.lazy(() => import('./containers/Orders/Orders')),
-  Checkout: React.lazy(() => import('./containers/Checkout/Checkout')),
-  Logout: React.lazy(() => import('./containers/Auth/Logout/Logout'))
 }; */
+
+const lazyLoad = {
+  Auth: lazy(() => import('./containers/Auth/Auth')),
+  Orders: lazy(() => import('./containers/Orders/Orders')),
+  Checkout: lazy(() => import('./containers/Checkout/Checkout')),
+  Logout: lazy(() => import('./containers/Auth/Logout/Logout'))
+};
 
 const app = (props) => {  
   // console.log('[app] props: ', props);
@@ -45,7 +44,9 @@ const app = (props) => {
 
   useEffect(() => {
     props.onTryAutoSignup();
-  }, []);
+  }, []);  // REM: pass en empty array to execute the callback (1st argument) only once (as componentDidMount() in class-based) thus prevent infinite loop, since useEffect() has nothing compare with for re-execute the callback (1st argument) - as with componentDidMount() in class-based
+  // }, [someArgument]); // REM: for example: passing 'someArgument' as 2nd argument, the callback (1st argument) will be executed/activated at every change of 2nd argument - as with componentDidMount() + componentDidUpdate() with an if check included in it
+  // }; // REM: no 2nd argument: will run for every render cycle  
   /* componentWillMount() {
     this.props.onTryAutoSignup();
   } */
@@ -54,8 +55,8 @@ const app = (props) => {
     // console.log('[App] props: ', this.props);
     let routes = (
       <Switch>
-        {/* <Route path="/auth" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Auth /></Suspense>} /> */}
-        <Route path="/auth" component={Async.Auth} />
+        <Route path="/auth" render={() => <lazyLoad.Auth />} />
+        {/* <Route path="/auth" component={Async.Auth} /> */}
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to='/' />
       </Switch>
@@ -67,14 +68,14 @@ const app = (props) => {
     // if (this.props.isAuthenticated) {
       routes =
         (<Switch>
-          {/* <Route path="/orders" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Orders /></Suspense>} />
-          <Route path="/checkout" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Checkout /></Suspense>} />
-          <Route path="/logout" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Logout /></Suspense>} />
-          <Route path="/auth" render={() => <Suspense fallback={<Spinner />}><lazyLoading.Auth /></Suspense>} /> */}
-          <Route path="/orders" component={Async.Orders} />
+          <Route path="/orders" render={() => <lazyLoad.Orders />} />
+          <Route path="/checkout" render={() => <lazyLoad.Checkout />} />
+          <Route path="/logout" render={() => <lazyLoad.Logout />} />
+          <Route path="/auth" render={() => <lazyLoad.Auth />} />
+          {/* <Route path="/orders" component={Async.Orders} />
           <Route path="/checkout" component={Async.Checkout} />
           <Route path="/logout" component={Async.Logout} />
-          <Route path="/auth" component={Async.Auth} />
+          <Route path="/auth" component={Async.Auth} /> */}
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to='/' />
         </Switch>
@@ -85,7 +86,8 @@ const app = (props) => {
         <Layout>
           {/* test purposes: removing interceptors registered in withErrorHandler */}
           {/* {this.state.show ? <BurgerBuilder /> : null} */}
-          {routes}
+          <Suspense fallback={<Spinner />}>{routes}</Suspense>
+          {/* {routes} */}
         </Layout>
       </div>
     );
