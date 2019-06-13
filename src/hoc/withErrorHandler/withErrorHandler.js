@@ -3,8 +3,8 @@ import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../Aux/Aux';
 
 const withErrorHandler = (WrappedComponent, axios) => {
-    // REM: this is HOC hence theorically it is intended to be used on components that required error handling. If it's used by multiple components, then there will be multiple instances of the interface (class below), hence multiple interceptors will be created too, which would lead to dead/unused interceptors sitting in memory, which still react to requests, worst case they lead to errors, or somehow change the state of the app, and even in best case they leak memory. Therefore using componentWillUnmount lifecycle hook to eject (clean/remove) interceptors that are no longer needed.
-    return (props) => { // REM: used without class name as an interface
+    // REM: this is HOC hence theoretically it is intended to be used on components that required error handling. If it's used by multiple components, then there will be multiple instances of the interface (class below), hence multiple interceptors will be created too, which would lead to dead/unused interceptors sitting in memory, which still react to requests, worst case they lead to errors, or somehow change the state of the app, and even in best case they leak memory. Therefore using componentWillUnmount lifecycle hook to eject (clean/remove) interceptors that are no longer needed.
+    return (props) => { // REM: converted to functional component to use React hooks, from interface (class without name)
         // console.log('props: ', props);
     // return class extends Component { // REM: used without class name as an interface
         const [error, setError] = useState(null);
@@ -63,6 +63,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 });
         } */
 
+        // REM: useEffect() as componentWillMount() hook in class-based
         useEffect(() => {
             console.log('useEffect() cleanup...');
             console.log(reqInterceptor, ' ', resInterceptor);
