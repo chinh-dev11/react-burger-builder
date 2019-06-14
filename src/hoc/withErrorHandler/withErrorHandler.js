@@ -32,17 +32,17 @@ const withErrorHandler = (WrappedComponent, axios) => {
         // REM: to have the following code runs before component rendered, as with componentWillMount(), it just needs to be declared before JSX code (before return(...) below)
         // REM: cannot use useEffect() here since useEffect() always runs after component rendered (the render cycle - return(...JSX...))
         const reqInterceptor = axios.interceptors.request.use(req => {
-            console.log('[withErrorHandler] componentWillMount interceptors.request: ', req);
+            // console.log('[withErrorHandler] componentWillMount interceptors.request: ', req);
             setError(null);
             return req;
         });
         const resInterceptor = axios.interceptors.response.use(
             res => {
-                console.log('[withErrorHandler] componentWillMount interceptors.response: ', res);
+                // console.log('[withErrorHandler] componentWillMount interceptors.response: ', res);
                 return res;
             }, 
             err => {
-                console.log('[withErrorHandler] componentWillMount interceptors.response.error: ', err);
+                // console.log('[withErrorHandler] componentWillMount interceptors.response.error: ', err);
                 setError(err);
             });
         /* componentWillMount() {
@@ -65,10 +65,10 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
         // REM: useEffect() as componentWillMount() hook in class-based
         useEffect(() => {
-            console.log('useEffect() cleanup...');
-            console.log(reqInterceptor, ' ', resInterceptor);
+            // console.log('useEffect() cleanup...');
+            // console.log(reqInterceptor, ' ', resInterceptor);
             return () => { // REM: cleanup
-                console.log('cleaning up...');
+                // console.log('cleaning up...');
                 axios.interceptors.request.eject(reqInterceptor);
                 axios.interceptors.request.eject(resInterceptor);
             };

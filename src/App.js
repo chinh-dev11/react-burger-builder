@@ -55,7 +55,7 @@ const app = (props) => {
     // console.log('[App] props: ', this.props);
     let routes = (
       <Switch>
-        <Route path="/auth" render={() => <lazyLoad.Auth />} />
+        <Route path="/auth" render={props => <lazyLoad.Auth {...props} />} />
         {/* <Route path="/auth" component={Async.Auth} /> */}
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to='/' />
@@ -68,10 +68,10 @@ const app = (props) => {
     // if (this.props.isAuthenticated) {
       routes =
         (<Switch>
-          <Route path="/orders" render={() => <lazyLoad.Orders />} />
-          <Route path="/checkout" render={() => <lazyLoad.Checkout />} />
-          <Route path="/logout" render={() => <lazyLoad.Logout />} />
-          <Route path="/auth" render={() => <lazyLoad.Auth />} />
+          <Route path="/orders" render={props => <lazyLoad.Orders {...props} />} />
+          <Route path="/checkout" render={props => <lazyLoad.Checkout {...props} />} />
+          <Route path="/logout" render={props => <lazyLoad.Logout {...props} />} />
+          <Route path="/auth" render={props => <lazyLoad.Auth {...props} />} />
           {/* <Route path="/orders" component={Async.Orders} />
           <Route path="/checkout" component={Async.Checkout} />
           <Route path="/logout" component={Async.Logout} />
