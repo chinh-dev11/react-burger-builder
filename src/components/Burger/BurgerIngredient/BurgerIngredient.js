@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import classes from './BurgerIngredient.module.css';
 
-class BurgerIngredient extends Component {
-    render(props) {
+const burgerIngredient = props => {
+    // render(props) {
         let ingredient = null;
 
-        switch (this.props.type) {
+        switch (props.type) {
             case 'bread-bottom':
                 ingredient = <div className={classes.BreadBottom}></div>;
                 break;
@@ -36,11 +36,12 @@ class BurgerIngredient extends Component {
         }
 
         return ingredient;
-    }
+    // }
 };
 
-BurgerIngredient.propTypes = {
+// REM: React PropTypes, built-in typechecking abilities, exports a range of validators that can be used to make sure the data you receive is valid.
+burgerIngredient.propTypes = {
     type: PropTypes.string.isRequired
 };
 
-export default BurgerIngredient;
+export default burgerIngredient;
