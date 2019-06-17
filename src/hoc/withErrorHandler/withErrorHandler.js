@@ -1,13 +1,14 @@
 import React, { Component, useState, useEffect } from 'react';
 import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../Aux/Aux';
+import useHttpErrorHandler from '../../hooks/http-error-handler';
 
 const withErrorHandler = (WrappedComponent, axios) => {
     // REM: this is HOC hence theoretically it is intended to be used on components that required error handling. If it's used by multiple components, then there will be multiple instances of the interface (class below), hence multiple interceptors will be created too, which would lead to dead/unused interceptors sitting in memory, which still react to requests, worst case they lead to errors, or somehow change the state of the app, and even in best case they leak memory. Therefore using componentWillUnmount lifecycle hook to eject (clean/remove) interceptors that are no longer needed.
     return (props) => { // REM: converted to functional component to use React hooks, from interface (class without name)
         // console.log('props: ', props);
     // return class extends Component { // REM: used without class name as an interface
-        const [error, setError] = useState(null);
+        // const [error, setError] = useState(null); // moved to http-error-handler.js
         /* state = {
             error: null
         }; */
@@ -31,7 +32,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
         // REM: to have the following code runs before component rendered, as with componentWillMount(), it just needs to be declared before JSX code (before return(...) below)
         // REM: cannot use useEffect() here since useEffect() always runs after component rendered (the render cycle - return(...JSX...))
-        const reqInterceptor = axios.interceptors.request.use(req => {
+        /* const reqInterceptor = axios.interceptors.request.use(req => {
             // console.log('[withErrorHandler] componentWillMount interceptors.request: ', req);
             setError(null);
             return req;
@@ -44,7 +45,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
             err => {
                 // console.log('[withErrorHandler] componentWillMount interceptors.response.error: ', err);
                 setError(err);
-            });
+            }); */ // moved to http-error-handler.js
         /* componentWillMount() {
             this.reqInterceptor = axios.interceptors.request.use(req => {
                 console.log('[withErrorHandler] componentWillMount interceptors.request: ', req);
@@ -63,8 +64,9 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 });
         } */
 
-        // REM: useEffect() as componentWillMount() hook in class-based
-        useEffect(() => {
+        // REM: useEffect() as with componentWillMount() hook in class-based
+        // REM: useEffect() will be execute, hence doing cleanup in this case, when there are changes in arguments (reqInterceptor/resInterceptor)
+        /* useEffect(() => {
             // console.log('useEffect() cleanup...');
             // console.log(reqInterceptor, ' ', resInterceptor);
             return () => { // REM: cleanup
@@ -72,7 +74,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 axios.interceptors.request.eject(reqInterceptor);
                 axios.interceptors.request.eject(resInterceptor);
             };
-        }, [reqInterceptor, resInterceptor]); // REM: useEffect() will be execute, hence doing cleanup in this case, when there are changes in arguments (reqInterceptor/resInterceptor)
+        }, [reqInterceptor, resInterceptor]); */ // moved to http-error-handler.js
         // eject (clean/remove) interceptors that are no longer needed
         /* componentWillUnmount() {
             console.log('[withErrorHandler] componentWillUnmount', this.reqInterceptor, this.resInterceptor); // [withErrorHandler] componentWillUnmount 0 0
@@ -80,22 +82,28 @@ const withErrorHandler = (WrappedComponent, axios) => {
             axios.interceptors.request.eject(this.resInterceptor);
         } */
 
-        const errorConfirmedHandler = () => {
+        /* const errorConfirmedHandler = () => {
             setError(null);
-        };
+        }; */ // moved to http-error-handler.js
         /* errorConfirmedHandler = () => {
             this.setState({ error: null });
         }; */
+
+        // REM: using custom error handler hook
+        const [err, clearErr] = useHttpErrorHandler(axios); // REM: destructuring array
 
         // render(props) {
             return (
                 <Aux>
                     <Modal
-                        show={error}
+                        show={err}
+                        // show={error}
                         // show={this.state.error}
-                        modalClosed={errorConfirmedHandler}>
+                        modalClosed={clearErr}>
+                        {/* modalClosed={errorConfirmedHandler}> */}
                         {/* modalClosed={this.errorConfirmedHandler}> */}
-                        {error ? error.message : null}
+                        {err ? err.message : null}
+                        {/* {error ? error.message : null} */}
                         {/* {this.state.error ? this.state.error.message : null} */}
                     </Modal>
                     <WrappedComponent {...props} />
