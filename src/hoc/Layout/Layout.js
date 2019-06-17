@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 
 import Aux from '../Aux/Aux'; // custom component should be imported as Aux (capitalized)
@@ -6,44 +6,68 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
-class Layout extends Component {
-    state = {
+const layout = (props) => {
+// class Layout extends Component {
+    const [sideDrawerIsVisible, setSideDrawerIsVisible] = useState(false);
+    /* state = {
         showSideDrawer: false
-    };
+    }; */
 
-    sideDrawerClosedHandler = () => {
+    const sideDrawerClosedHandler = () => {
+        setSideDrawerIsVisible(false);
+    };
+    /* sideDrawerClosedHandler = () => {
         this.setState({
             showSideDrawer: false
         });
-    };
+    }; */
 
-    sideDrawerToggleHandler = () => {
-        /* this.setState({
-            showSideDrawer: !this.state.showSideDrawer // REM: getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
+    const sideDrawerToggleHandler = () => {
+        // this.setState({
+            // showSideDrawer: !this.state.showSideDrawer // REM: getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
+        // });
+        setSideDrawerIsVisible(!sideDrawerIsVisible);
+        /* this.setState((prevState) => {
+            return {
+                showSideDrawer: !prevState.showSideDrawer
+            };
         }); */
+    };
+    /* sideDrawerToggleHandler = () => {
+        // this.setState({
+            // showSideDrawer: !this.state.showSideDrawer // REM: getting the state (this.state.showSideDrawer) in setState might not return the previous state due to async nature of setState, therefore it's recommended to use the function form to get the previous state instead, as below...
+        // });
         this.setState((prevState) => {
             return {
                 showSideDrawer: !prevState.showSideDrawer
             };
         });
-    };
+    }; */
 
-    render(props) {
+    // render(props) {
         return (
             <Aux>
                 <Toolbar
-                    isAuth={this.props.isAuthenticated}
-                    drawerToggleClicked={this.sideDrawerToggleHandler} />
+                    isAuth={props.isAuthenticated}
+                    // isAuth={this.props.isAuthenticated}
+                    drawerToggleClicked={sideDrawerToggleHandler}
+                    // drawerToggleClicked={this.sideDrawerToggleHandler}
+                />
                 <SideDrawer
-                    isAuth={this.props.isAuthenticated}
-                    open={this.state.showSideDrawer}
-                    closed={this.sideDrawerClosedHandler} />
+                    isAuth={props.isAuthenticated}
+                    // isAuth={this.props.isAuthenticated}
+                    open={sideDrawerIsVisible}
+                    // open={this.state.showSideDrawer}
+                    closed={sideDrawerClosedHandler}
+                    // closed={this.sideDrawerClosedHandler}
+                />
                 <main className={classes.Content}>
-                    {this.props.children}
+                    {props.children}
+                    {/* {this.props.children} */}
                 </main>
             </Aux>
         );
-    };
+    // };
 }
 
 const mapStateToProps = state => {
@@ -52,4 +76,5 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps)(layout);
+// export default connect(mapStateToProps)(Layout);

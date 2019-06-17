@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -17,42 +17,41 @@ import { updateObject, checkValidity } from '../../shared/utility';
     minLength: 'Length of 6 characters minimum'
 }; */
 
-class Auth extends Component {
-    state = {
-        controls: {
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Mail Address'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    isEmail: true
-                },
-                valid: false,
-                touched: false
+const auth = props => {
+// class Auth extends Component {
+    const [controls, setControls] = useState({
+        email: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'email',
+                placeholder: 'Mail Address'
             },
-            password: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'password',
-                    placeholder: 'Password'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 6 // length required by Firebase
-                },
-                valid: false,
-                touched: false
-            }
+            value: '',
+            validation: {
+                required: true,
+                isEmail: true
+            },
+            valid: false,
+            touched: false
         },
-        isSignUp: true
-    };
+        password: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'password',
+                placeholder: 'Password'
+            },
+            value: '',
+            validation: {
+                required: true,
+                minLength: 6 // length required by Firebase
+            },
+            valid: false,
+            touched: false
+        }
+    });
+    const [isSignUp, setIsSignUp] = useState(true);
 
-    inputChangedHandler = (evt, id) => {
+    const inputChangedHandler = (evt, id) => {
         // REM: set state immutably - nested objects
         /* const updatedControls = {
             ...this.state.controls,
@@ -65,60 +64,53 @@ class Auth extends Component {
         }; */
         // using updateObject utility
         const updatedControls = updateObject(
-            this.state.controls,
+            controls,
             {
                 [id]: updateObject(
-                    this.state.controls[id],
+                    controls[id],
                     {
                         value: evt.target.value,
-                        valid: checkValidity(evt.target.value, this.state.controls[id].validation),
+                        valid: checkValidity(evt.target.value, controls[id].validation),
                         touched: true
                     }
                 )
             }
         );
 
-        this.setState({
-            controls: updatedControls
-        });
+        setControls(updatedControls);
     };
 
-    onSubmitHandler = (evt) => {
+    const onSubmitHandler = (evt) => {
         // console.log('onSubmitHandler... evt: ', evt);
         evt.preventDefault();
 
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
+        props.onAuth(controls.email.value, controls.password.value, isSignUp);
     };
 
-    switchAuthModeHandler = () => {
-        this.setState(prevState => {
-            return {
-                ...this.state,
-                isSignUp: !prevState.isSignUp
-            };
-        });
+    const switchAuthModeHandler = () => {
+        setIsSignUp(!isSignUp)
     };
 
-    render(props) {
+    // render(props) {
         // console.log('props: ', this.props);
         let formError = null;
-        if (this.props.error) {
-            formError = <span className={classes.Error}>{this.props.error.message}</span>
+        if (props.error) {
+            formError = <span className={classes.Error}>{props.error.message}</span>
         }
 
         let authRedirect = null;
-        if (this.props.isAuthenticated) {
-            authRedirect = <Redirect to={this.props.authRedirectPath} />;
+        if (props.isAuthenticated) {
+            authRedirect = <Redirect to={props.authRedirectPath} />;
         }
 
         let authForm = <Spinner />;
-        if (!this.props.loading) {
+        if (!props.loading) {
             // REM: transforming object to array of objects 
             const formElementsArray = [];
-            for (let key in this.state.controls) {
+            for (let key in controls) {
                 formElementsArray.push({
                     id: key,
-                    config: this.state.controls[key]
+                    config: controls[key]
                 });
             }
             const inputElements = formElementsArray.map(formElement => {
@@ -131,12 +123,12 @@ class Auth extends Component {
                         invalid={!formElement.config.valid}
                         shouldValidate={formElement.config.validation}
                         touched={formElement.config.touched}
-                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                        changed={(event) => inputChangedHandler(event, formElement.id)}
                     />
                 );
             });
             authForm = (
-                <form onSubmit={this.onSubmitHandler}>
+                <form onSubmit={onSubmitHandler}>
                     {inputElements}
                     <Button cssClass="Success" btnType="submit">SUBMIT</Button>
                 </form>
@@ -152,12 +144,12 @@ class Auth extends Component {
                 <Button
                     cssClass="Danger"
                     btnType="button"
-                    clicked={this.switchAuthModeHandler}
-                >Switch to {this.state.isSignUp ? 'SIGNIN' : 'SIGNUP'}</Button>
+                    clicked={switchAuthModeHandler}
+                >Switch to {isSignUp ? 'SIGNIN' : 'SIGNUP'}</Button>
             </div>
         );
-    }
-}
+    // }
+};
 
 const mapStateToProps = state => {
     return {
@@ -175,4 +167,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(auth, axios));
