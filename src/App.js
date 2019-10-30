@@ -109,4 +109,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(app);
 // export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(App));
 
-console.log('***** ', process.env);
