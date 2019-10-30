@@ -11,7 +11,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 
-// REM: import the component in test file (BurgerBuilder.test.js) for shallow rendering will cause the following error, due to the use of 'connect' (Redux store), therefore export explicitly the component as 'export class BurgerBuilder extends Component {...}' to be imported in test file :
+// REM - import the component in test file (BurgerBuilder.test.js) for shallow rendering will cause the following error, due to the use of 'connect' (Redux store), therefore export explicitly the component as 'export class BurgerBuilder extends Component {...}' to be imported in test file :
 /* 
 Error: Invariant Violation: Could not find "store" in the context of "Connect(_temp)". Either wrap the root component in a <Provider>, or pass a custom React context provider to <Provider> and the corresponding React context consumer to Connect(_temp) in connect options.
 
@@ -92,8 +92,8 @@ const burgerBuilder = props => {
 
         if (props.ings) {
             // to disabling the Less button if the ingredient is 0
-            const disabledInfo = { ...props.ings }; // REM: create a copy of ingredients
-            // const disabledInfo = { ...this.state.ingredients }; // REM: create a copy of ingredients
+            const disabledInfo = { ...props.ings }; // REM - create a copy of ingredients
+            // const disabledInfo = { ...this.state.ingredients }; // REM - create a copy of ingredients
             for (let key in disabledInfo) {
                 disabledInfo[key] = disabledInfo[key] <= 0;
             }

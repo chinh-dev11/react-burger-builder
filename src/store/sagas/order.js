@@ -37,7 +37,7 @@ export function* ordersFetchSaga(action) {
     const reqConfig = {
         url: '/orders.json?' + queryParams.auth + '&' + queryParams.orderBy + '&' + queryParams.equalTo,
         // url: '/orders.json',
-        // auth: authToken // REM: Firebase requires auth param in the url
+        // auth: authToken // REM - Firebase requires auth param in the url
         method: 'get',
     };
     // https://react-burger-builder-f2419.firebaseio.com/orders.json?auth=eyJ...&orderBy="userId"&equalTo="ZFP85PgI76gKVfMGPqqidK86Z242"

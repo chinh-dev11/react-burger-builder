@@ -52,7 +52,7 @@ const auth = props => {
     const [isSignUp, setIsSignUp] = useState(true);
 
     const inputChangedHandler = (evt, id) => {
-        // REM: set state immutably - nested objects
+        // REM - set state immutably - nested objects
         /* const updatedControls = {
             ...this.state.controls,
             [id]: {
@@ -105,7 +105,7 @@ const auth = props => {
 
         let authForm = <Spinner />;
         if (!props.loading) {
-            // REM: transforming object to array of objects 
+            // REM - transforming object to array of objects 
             const formElementsArray = [];
             for (let key in controls) {
                 formElementsArray.push({

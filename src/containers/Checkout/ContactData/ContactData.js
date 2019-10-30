@@ -111,7 +111,7 @@ const contactData = props => {
                 ]
             },
             value: 'fastest', // by default if not touched/changed
-            validation: {}, // FIX: 1) explicitly declare empty object to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option. This is a preferred method since it keeps the form config uniformly
+            validation: {}, // FIX - 1) explicitly declare empty object to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option. This is a preferred method since it keeps the form config uniformly
             valid: true
         }
     });
@@ -119,7 +119,7 @@ const contactData = props => {
 
     const orderHandler = (event) => {
         // console.log(event);        
-        event.preventDefault(); // REM: to prevent auto request sent, hence page reload, due to form
+        event.preventDefault(); // REM - to prevent auto request sent, hence page reload, due to form
 
         const formData = {};
         for (let formElementIdentifier in orderForm) {
@@ -139,7 +139,7 @@ const contactData = props => {
     // inputIdentifier: name, street, zipcode, country, email, deliveryMethod
     const inputChangedHandler = (evt, inputIdentifier) => {
         // const updatedOrderForm = { ...this.state.orderForm }; // clone (a copy) of orderForm by spreading the object
-        // REM: spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
+        // REM - spread operator does not deep (nested objects) clone, but only copies pointer to nested objects, hence the original state could be MUTABLY changed and NOT RECOMMENDED. All nested objects are REQUIRED to be cloned/copied before IMMUTABLY changing its state
         /* const updatedOrderElement = { ...updatedOrderForm[inputIdentifier] }; // clone (a copy) an element of orderForm by spreading the object
         updatedOrderElement.value = evt.target.value;
         updatedOrderElement.valid = this.checkValidityAndError(evt.target.value, this.state.orderForm[inputIdentifier], updatedOrderElement);
@@ -173,48 +173,48 @@ const contactData = props => {
     };
 
     // render(props) {
-        // console.log('[ContactData] ', this.props);
-        // console.log(this.state.orderForm);
-        let formElementsArray = [];
-        for (let key in orderForm) {
-            formElementsArray.push({
-                id: key,
-                config: orderForm[key]
-            });
-        }
-        // console.log(formElementsArray);
-        const inputElements = formElementsArray.map(formElement => (
-            <Input
-                key={formElement.id}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                validationError={formElement.config.validationError}
-                changed={(event) => inputChangedHandler(event, formElement.id)}
-            />
-        ));
+    // console.log('[ContactData] ', this.props);
+    // console.log(this.state.orderForm);
+    let formElementsArray = [];
+    for (let key in orderForm) {
+        formElementsArray.push({
+            id: key,
+            config: orderForm[key]
+        });
+    }
+    // console.log(formElementsArray);
+    const inputElements = formElementsArray.map(formElement => (
+        <Input
+            key={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            validationError={formElement.config.validationError}
+            changed={(event) => inputChangedHandler(event, formElement.id)}
+        />
+    ));
 
-        let form = props.error ? <p>Something went wrong!</p> : <Spinner />;
-        if (!props.loading) {
-            form = (
-                <form onSubmit={orderHandler}>
-                    {inputElements}
-                    <Button cssClass="Success" btnType="submit" disabled={!formIsValid}>Order</Button>
-                    {/* <Button cssClass="Success" clicked={this.orderHandler}>Order</Button> */}
-                </form>
-            );
-        } else {
-            form = <Spinner />;
-        }
-        return (
-            <div className={classes.ContactData}>
-                <h4>Enter your Contact Data</h4>
-                {form}
-            </div>
+    let form = props.error ? <p>Something went wrong!</p> : <Spinner />;
+    if (!props.loading) {
+        form = (
+            <form onSubmit={orderHandler}>
+                {inputElements}
+                <Button cssClass="Success" btnType="submit" disabled={!formIsValid}>Order</Button>
+                {/* <Button cssClass="Success" clicked={this.orderHandler}>Order</Button> */}
+            </form>
         );
+    } else {
+        form = <Spinner />;
+    }
+    return (
+        <div className={classes.ContactData}>
+            <h4>Enter your Contact Data</h4>
+            {form}
+        </div>
+    );
     // }
 };
 

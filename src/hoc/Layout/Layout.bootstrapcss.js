@@ -2,8 +2,8 @@ import React from 'react';
 import Aux from '../../hoc/Aux'; // custom component should be imported as Aux (capitalized)
 import cssClasses from './Layout.css';
 
-// Issue: Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
-// FIX:
+// ISSUE - Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
+// FIX -
 // 1. add enclosing tag: <div>...</div> OR
 // 2. return as an array and add unique key to each adjacent elements OR
 // 3. with HOC (Higher Order Component) and add auxiliary tag: <Aux>...</Aux> or <Auxiliary>...</Auxiliary> for Windows
@@ -32,7 +32,7 @@ const layout = props => (
         </header>
 
         <main role="main" className={cssClasses.Content}>{props.children}</main>
-        
+
         <footer className="footer mt-auto py-3">
             <div className="container">
                 <span className="text-muted">Place sticky footer content here!</span>

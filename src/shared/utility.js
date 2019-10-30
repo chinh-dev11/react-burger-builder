@@ -23,7 +23,7 @@ export const checkValidity = (value, rules) => {
         isValid = value.length <= rules.maxLength && isValid;
     }
 
-    // REM: email validation pattern
+    // REM - email validation pattern
     if (rules.isEmail) {
         const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
         isValid = pattern.test(value) && isValid;
@@ -44,7 +44,7 @@ export const checkValidityAndError = (value, orderElement) => {
     };
 
     if (!orderElement.validation) {
-        return checked; // FIX: 2) to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option
+        return checked; // FIX - 2) to prevent "TypeError: Cannot read property 'required' of undefined" in checkValidityAndError() when toggle the delivery method select option
     }
 
     if (orderElement.validation.required) {

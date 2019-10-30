@@ -28,7 +28,7 @@ export const purchaseBurgerFail = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-    // REM: moved to purchaseBurgerSaga() using redux-saga
+    // REM - moved to purchaseBurgerSaga() using redux-saga
     /* const reqConfig = {
         url: '/orders.json?auth=' + token,
         data: orderData,
@@ -79,7 +79,7 @@ export const fetchOrdersFail = (error) => {
 };
 
 export const fetchOrders = (token, userId) => {
-    // REM: moved to ordersFetchSaga() using redux-saga
+    // REM - moved to ordersFetchSaga() using redux-saga
     /**
      * Passing the token to the request
         1) with the dispatch/state arguments - NOT RECOMMENDED
@@ -113,7 +113,7 @@ export const fetchOrders = (token, userId) => {
     /* const reqConfig = {
         url: '/orders.json?' + queryParams.auth + '&' + queryParams.orderBy + '&' + queryParams.equalTo,
         // url: '/orders.json',
-        // auth: authToken // REM: Firebase requires auth param in the url
+        // auth: authToken // REM - Firebase requires auth param in the url
         method: 'get',
     }; */
     // https://react-burger-builder-f2419.firebaseio.com/orders.json?auth=eyJ...&orderBy="userId"&equalTo="ZFP85PgI76gKVfMGPqqidK86Z242"
