@@ -13,12 +13,12 @@ const localStorageKeys = {
     tokenExpiredDate: 'bbTokenExpiredDate'
 };
 
-// REM: function*: generators, next generation JS feature, are functions which can be executed incrementally. They can be paused during function's execution, for example to wait for async code to finish
+// REM - function*: generators, next generation JS feature, are functions which can be executed incrementally. They can be paused during function's execution, for example to wait for async code to finish
 export function* logoutSaga() {
-    // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
-    // REM: yield (next-gen JS): execute and wait for code termination before executing the next line of code
+    // REM - localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
+    // REM - yield (next-gen JS): execute and wait for code termination before executing the next line of code
     // yield localStorage.removeItem(localStorageKeys.tokenId);
-    // REM: call: use to easily mocked and test the generator without necessarily execute the code
+    // REM - call: use to easily mocked and test the generator without necessarily execute the code
     yield call([localStorage, 'removeItem'], localStorageKeys.tokenId);
     // yield localStorage.removeItem(localStorageKeys.tokenExpiredDate);
     yield call([localStorage, 'removeItem'], localStorageKeys.tokenExpiredDate);
@@ -59,7 +59,7 @@ export function* authUserSaga(action) {
         method: 'post'
     };
 
-    // REM: replacing 'then' with yield (next-gen JS)
+    // REM - replacing 'then' with yield (next-gen JS)
     /**
      * axios: returns a promise
      * yield: waits until it gets the response|error, hence no longer require 'then' to execute the inner code (const expiresInMillisecs...), but instead it will execute the following code once 'res' is resolved
@@ -70,10 +70,10 @@ export function* authUserSaga(action) {
         /* 
         .then(res => {
             // res.data.expiresIn = 30;
-            const expiresInMillisecs = res.data.expiresIn * 1000; // REM: transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
+            const expiresInMillisecs = res.data.expiresIn * 1000; // REM - transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
             const expiredDate = new Date(Date.now() + expiresInMillisecs); // Fri May 24 2019 12:30:23 GMT-0400 (GMT-04:00)
 
-            // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
+            // REM - localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
             localStorage.setItem(localStorageKeys.tokenId, res.data.idToken);
             localStorage.setItem(localStorageKeys.tokenExpiredDate, expiredDate);
 
@@ -81,10 +81,10 @@ export function* authUserSaga(action) {
             dispatch(checkAuthTimeout(expiresInMillisecs));
         }) 
         */
-        const expiresInMillisecs = yield res.data.expiresIn * 1000; // REM: transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
+        const expiresInMillisecs = yield res.data.expiresIn * 1000; // REM - transform expiresIn to milliseconds to use in JS environment; setTimeout, Date,... work in millisecs
         const expiredDate = yield new Date(Date.now() + expiresInMillisecs); // Fri May 24 2019 12:30:23 GMT-0400 (GMT-04:00)
 
-        // REM: localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
+        // REM - localStorage can be accessed by XSS (Cross-Site Scripting), but it's prevented by React/Angular
         yield localStorage.setItem(localStorageKeys.tokenId, res.data.idToken);
         yield localStorage.setItem(localStorageKeys.tokenExpiredDate, expiredDate);
 
@@ -106,7 +106,7 @@ export function* authCheckStateSaga() {
     const expiredDateStored = (new Date(localStorage.getItem(localStorageKeys.tokenExpiredDate)).getTime()); // transform tokenExpiredDate string into millisecs with getTime() of Date object
     const expirationTime = expiredDateStored - Date.now();
 
-    // REM: authSuccess() requires 'idToken' and 'localId' (see authSuccess() in auth reducer)
+    // REM - authSuccess() requires 'idToken' and 'localId' (see authSuccess() in auth reducer)
     // Solutions:
     /* 
         1) store 'localId' in localStorage, as with 'idToken', in auth() above, and passing by getting them from localStorage when dispatching authSuccess() as:
@@ -131,7 +131,7 @@ export function* authCheckStateSaga() {
             method: 'post'
         };
 
-        // REM: replacing 'then' with yield (next-gen JS)
+        // REM - replacing 'then' with yield (next-gen JS)
         /**
          * axios: returns a promise
          * yield: waits until it gets the response|error, hence no longer require 'then' to execute the inner code (authSuccess(tokenStored,...), but instead it will execute the following code once 'res' is resolved

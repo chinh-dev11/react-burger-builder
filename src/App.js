@@ -44,9 +44,9 @@ const app = (props) => {
 
   useEffect(() => {
     props.onTryAutoSignup();
-  }, []);  // REM: pass en empty array to execute the callback (1st argument) only once (as componentDidMount() in class-based) thus prevent infinite loop, since useEffect() has nothing compare with for re-execute the callback (1st argument) - as with componentDidMount() in class-based
-  // }, [someArgument]); // REM: for example: passing 'someArgument' as 2nd argument, the callback (1st argument) will be executed/activated at every change of 2nd argument - as with componentDidMount() + componentDidUpdate() with an if check included in it
-  // }; // REM: no 2nd argument: will run for every render cycle  
+  }, []);  // REM - pass en empty array to execute the callback (1st argument) only once (as componentDidMount() in class-based) thus prevent infinite loop, since useEffect() has nothing compare with for re-execute the callback (1st argument) - as with componentDidMount() in class-based
+  // }, [someArgument]); // REM - for example: passing 'someArgument' as 2nd argument, the callback (1st argument) will be executed/activated at every change of 2nd argument - as with componentDidMount() + componentDidUpdate() with an if check included in it
+  // }; // REM - no 2nd argument: will run for every render cycle  
   /* componentWillMount() {
     this.props.onTryAutoSignup();
   } */
@@ -108,3 +108,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(app);
 // export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(App));
+
+console.log('***** ', process.env);

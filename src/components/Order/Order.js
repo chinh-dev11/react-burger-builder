@@ -34,9 +34,9 @@ const order = (props) => {
         <div className={classes.Order}>
             <p>Ingredients: {ingredientsOuput}</p>
             <p>Price: <strong>${props.price.toFixed(2)}</strong></p>
-            {/* REM: Use Number.parseFloat {Number.parseFloat(props.price).toFixed(2)} to convert price string to a number as below */}
+            {/* REM - Use Number.parseFloat {Number.parseFloat(props.price).toFixed(2)} to convert price string to a number as below */}
             {/* <p>Price: <strong>${Number.parseFloat(props.price).toFixed(2)}</strong></p> */}
-            {/* REM: Or add plus sign (+) to the price in Orders.js before passing it */}
+            {/* REM - Or add plus sign (+) to the price in Orders.js before passing it */}
         </div>
     );
 }

@@ -39,7 +39,7 @@ const burgerIngredient = props => {
     // }
 };
 
-// REM: React PropTypes, built-in typechecking abilities, exports a range of validators that can be used to make sure the data you receive is valid.
+// REM - React PropTypes, built-in typechecking abilities, exports a range of validators that can be used to make sure the data you receive is valid.
 burgerIngredient.propTypes = {
     type: PropTypes.string.isRequired
 };

@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 
 const logout = props => {
-    // REM: why not using componentWillMount instead???
+    // REM - why not using componentWillMount instead???
     // componentWillMount() {
     useEffect(() => {
         props.onLogout();

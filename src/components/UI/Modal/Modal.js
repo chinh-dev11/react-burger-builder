@@ -10,8 +10,8 @@ import Backdrop from '../../UI/Backdrop/Backdrop';
 const modal = props => {
     // console.log('[Modal] props: ', props);
 // class Modal extends Component {
-    // REM: nextProps/nextState: parameters that can be used to validate when changes occurred  
-    // REM: use memo() in functional component to improve performance: export default React.memo(modal);
+    // REM - nextProps/nextState: parameters that can be used to validate when changes occurred  
+    // REM - use memo() in functional component to improve performance: export default React.memo(modal);
     /* shouldComponentUpdate(nextProps, nextState) { //* performance improvement purposes
         console.log('nextProps: ', nextProps);
         // console.log('[Modal] shouldComponentUpdate: ', nextProps.show);
@@ -49,9 +49,9 @@ const modal = props => {
     // }
 };
 
-export default React.memo( // REM: memo(): allows to optimize performance by caching (keep in memory) the component's latest rendering. By default it will re-render the component when props change, otherwise it will use the cache. As with PureComponent or shouldComponentUpdate() in class-based components
+export default React.memo( // REM - memo(): allows to optimize performance by caching (keep in memory) the component's latest rendering. By default it will re-render the component when props change, otherwise it will use the cache. As with PureComponent or shouldComponentUpdate() in class-based components
     modal,
-    // (prevProps, nextProps) => prevProps.show === nextProps.show && prevProps.children === nextProps.children // REM: use 2nd argument to specify when it should not re-render but use the cache instead OR
+    // (prevProps, nextProps) => prevProps.show === nextProps.show && prevProps.children === nextProps.children // REM - use 2nd argument to specify when it should not re-render but use the cache instead OR
     (prevProps, nextProps) => {
         // console.log('prevProps: ', prevProps);
         // console.log('nextProps: ', nextProps);

@@ -46,8 +46,8 @@ const input = props => {
                 <input
                     className={inputClasses.join(' ')}
                     {...props.elementConfig}
-                    value={props.value} // REM: with value attribute, it requires handling manually, via onChange() event, to set (setState|useSate)) the input value thus have it display on input box in browser
-                    // defaultValue={props.config.value} // REM: with defaultValue attribute, it allows having value/text entered displaying on input box in browser, no need handling manually the input value displaying
+                    value={props.value} // REM - with value attribute, it requires handling manually, via onChange() event, to set (setState|useSate)) the input value thus have it display on input box in browser
+                    // defaultValue={props.config.value} // REM - with defaultValue attribute, it allows having value/text entered displaying on input box in browser, no need handling manually the input value displaying
                     onChange={props.changed}
                 />
             );

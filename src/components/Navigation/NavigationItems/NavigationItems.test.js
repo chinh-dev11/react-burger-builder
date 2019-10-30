@@ -9,8 +9,8 @@ configure({
     adapter: new Adapter()
 });
 
-// REM: enzyme - allows to render only the element alone (<NavigationItems />), independent of the entire application
-// REM: shallow - allows to render the component with all its content, but the content is not deeply rendered; the <NavigationItem /> will be rendered as a placeholder, without its nested content
+// REM - enzyme - allows to render only the element alone (<NavigationItems />), independent of the entire application
+// REM - shallow - allows to render the component with all its content, but the content is not deeply rendered; the <NavigationItem /> will be rendered as a placeholder, without its nested content
 describe('<NavigationItems />', () => {
     let wrapper;
 
