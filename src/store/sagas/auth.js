@@ -4,7 +4,7 @@ import axios from 'axios'; // not using the custom axios (axios.orders)
 import * as actions from '../actions/index';
 
 const fireBaseConfig = {
-    apiKey: 'AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo',
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     reqUrl: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty' // Rest API
 };
 
@@ -43,10 +43,7 @@ export function* authUserSaga(action) {
      *                  ref: https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
      *      Sign In: https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=[API_KEY]
      *                  ref: https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-     * API_KEY: AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo (Project Settings page - https://console.firebase.google.com/project/react-burger-builder-f2419/settings/general/)
      */
-    // const apiKey = 'AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo';
-    // const reqUrl = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/'
     const endPoint = action.isSignUp ? '/signupNewUser' : '/verifyPassword'; // Sign Up / Sign In
     const payload = {
         email: action.email,
