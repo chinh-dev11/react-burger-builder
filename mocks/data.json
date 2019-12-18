@@ -1,0 +1,46 @@
+{
+  "ingredients" : {
+    "bacon" : 0,
+    "cheese" : 0,
+    "meat" : 0,
+    "salad" : 0
+  },
+  "orders" : {
+    "-LhL7Xw745XeUJixrXSI" : {
+      "ingredients" : {
+        "bacon" : 0,
+        "cheese" : 1,
+        "meat" : 0,
+        "salad" : 0
+      },
+      "orderData" : {
+        "country" : "test",
+        "deliveryMethod" : "fastest",
+        "email" : "test@test.com",
+        "name" : "test",
+        "street" : "test",
+        "zipcode" : "testt"
+      },
+      "price" : 4.4,
+      "userId" : "ZFP85PgI76gKVfMGPqqidK86Z242"
+    },
+    "-LhLjy-56bnxO6WIilj2" : {
+      "ingredients" : {
+        "bacon" : 1,
+        "cheese" : 1,
+        "meat" : 0,
+        "salad" : 0
+      },
+      "orderData" : {
+        "country" : "test",
+        "deliveryMethod" : "fastest",
+        "email" : "test@test.com",
+        "name" : "test",
+        "street" : "test",
+        "zipcode" : "testt"
+      },
+      "price" : 5.1000000000000005,
+      "userId" : "ZFP85PgI76gKVfMGPqqidK86Z242"
+    }
+  }
+}
