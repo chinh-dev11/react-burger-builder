@@ -2,16 +2,6 @@
 
 import * as actionTypes from './actionTypes';
 
-/* const fireBaseConfig = {
-    apiKey: 'AIzaSyD2sgqSrt0PvhkbmGYfSr3xru8guq1pQJo',
-    reqUrl: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty' // Rest API
-};
-
-const localStorageKeys = {
-    tokenId: 'bbTokenId',
-    tokenExpiredDate: 'bbTokenExpiredDate'
-};
- */
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
