@@ -24,7 +24,7 @@ const auth = props => {
             elementType: 'input',
             elementConfig: {
                 type: 'email',
-                placeholder: 'Mail Address'
+                placeholder: 'test@example.com'
             },
             value: '',
             validation: {
@@ -38,7 +38,7 @@ const auth = props => {
             elementType: 'input',
             elementConfig: {
                 type: 'password',
-                placeholder: 'Password'
+                placeholder: 'Passw0rd!'
             },
             value: '',
             validation: {
@@ -84,7 +84,7 @@ const auth = props => {
         // console.log('onSubmitHandler... evt: ', evt);
         evt.preventDefault();
 
-        props.onAuth(controls.email.value, controls.password.value, isSignUp);
+        props.onAuth(controls.email.value || 'test@example.com', controls.password.value || 'Passw0rd!', isSignUp);
     };
 
     const switchAuthModeHandler = () => {
