@@ -19,7 +19,7 @@ Error: Invariant Violation: Could not find "store" in the context of "Connect(_t
          |                   ^
       31 |     });
 */
-const burgerBuilder = props => {
+const BurgerBuilder = props => {
 // export class BurgerBuilder extends Component {
 // class BurgerBuilder extends Component {
     // old way
@@ -168,4 +168,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 // export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder, axios);
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(burgerBuilder, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../../store/actions/index';
 
-const logout = props => {
+const Logout = props => {
     // REM - why not using componentWillMount instead???
     // componentWillMount() {
     useEffect(() => {
@@ -24,4 +24,4 @@ const mapDispatchToProps = dispatch => {
         onLogout: () => dispatch(actions.logout())
     }
 }
-export default connect(null, mapDispatchToProps)(logout);
+export default connect(null, mapDispatchToProps)(Logout);

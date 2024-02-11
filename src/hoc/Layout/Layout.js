@@ -6,7 +6,7 @@ import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
-const layout = (props) => {
+const Layout = (props) => {
 // class Layout extends Component {
     const [sideDrawerIsVisible, setSideDrawerIsVisible] = useState(false);
     /* state = {
@@ -76,5 +76,5 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(layout);
+export default connect(mapStateToProps)(Layout);
 // export default connect(mapStateToProps)(Layout);

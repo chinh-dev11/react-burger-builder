@@ -17,7 +17,7 @@ import { updateObject, checkValidity } from '../../shared/utility';
     minLength: 'Length of 6 characters minimum'
 }; */
 
-const auth = props => {
+const Auth = props => {
 // class Auth extends Component {
     const [controls, setControls] = useState({
         email: {
@@ -167,4 +167,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(auth, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Auth, axios));
