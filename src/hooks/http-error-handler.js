@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 
-export default httpClient => {
+// export default httpClient => {
+const HttpClientHandler = httpClient => {
     const [error, setError] = useState(null);
 
     // REM - to have the following code runs before component rendered, as with componentWillMount(), it just needs to be declared before JSX code (before return(...) below)
@@ -40,3 +41,5 @@ export default httpClient => {
     // returning something is optional. We can return anything or none and handling the error here (eg: showing error in a modal), as in withErrorHandler.js
     return [error, errorConfirmedHandler];
 };
+
+export default HttpClientHandler

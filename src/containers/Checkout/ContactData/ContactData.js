@@ -11,7 +11,7 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 import { updateObject, checkValidityAndError } from '../../../shared/utility';
 
-const contactData = props => {
+const ContactData = props => {
     const [orderForm, setOrderForm] = useState({
         name: {
             elementType: 'input',
@@ -237,5 +237,5 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(contactData, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
 // export default withRouter(ContactData); // to make parent's (Checkout) routing props (history, location, match) avail to child (ContactData) component

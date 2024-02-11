@@ -31,7 +31,7 @@ const lazyLoad = {
   Logout: lazy(() => import('./containers/Auth/Logout/Logout'))
 };
 
-const app = (props) => {  
+const App = (props) => {  
   // console.log('[app] props: ', props);
 // class App extends Component {
   // test purposes: removing interceptors registered in withErrorHandler
@@ -105,7 +105,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(app);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(App));
 
